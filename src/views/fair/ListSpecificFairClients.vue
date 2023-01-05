@@ -335,9 +335,9 @@
 
 <script>
 import avatar from '@/assets/images/avatars/8.jpg'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import fairClientDTO from '@/models/fairClientDTO'
-import axios from 'axios'
+// import router from '@/router'
 // import Toast from '@/models/create_TOAST_dto'
 export default {
   name: 'Colors',
@@ -391,10 +391,13 @@ export default {
       this.getFairs(newvalue)
     },
   },
-  mounted() {
-    ;(this.isMounted = true), this.login()
-  },
   created() {
+    // If not logged in
+    // Role check is needed here ------------IMPORTANT
+    /* let isLoggedIn = this.checkIfLoggedIn
+    if (isLoggedIn) {
+      router.push({ name: 'Login Admin' })
+    } */
     this.getFairs(this.fairClientsTable.serverOptions)
   },
   methods: {
@@ -402,6 +405,9 @@ export default {
       getAllCategoryAPI: 'fair/getFairClients',
       deleteCategoryAPI: 'fair/deleteFairClient',
       updateCategoryAPI: 'fair/updateFairClient',
+    }),
+    ...mapGetters({
+      checkIfLoggedIn: 'auth/checkIfLoggedIn',
     }),
     submitToAPI(event, modalname, data) {
       // Response
@@ -484,9 +490,6 @@ export default {
       ]
       this.items = this.data
       this.fairClientsTable.loading = false
-    },
-    login() {
-      axios.get('https://jsonplaceholder.typicode.com/posts/1').catch(() => {})
     },
     async queueEnableSendButton() {
       await this.$store.dispatch('invokeSendButtonDelay')

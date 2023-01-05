@@ -376,10 +376,10 @@
 
 <script>
 import avatar from '@/assets/images/avatars/8.jpg'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import fairDTO from '@/models/fairDTO'
-import axios from 'axios'
 import Toast from '@/models/create_TOAST_dto'
+// import router from '@/router'
 export default {
   name: 'Colors',
   components: {
@@ -432,10 +432,11 @@ export default {
       this.getFairs(newvalue)
     },
   },
-  mounted() {
-    ;(this.isMounted = true), this.login()
-  },
   created() {
+    // If not logged in
+    // Role check is needed here ------------IMPORTANT
+    this.checkIfLoggedInAPI
+    console.log('CONTROLLED')
     this.getFairs(this.fairTable.serverOptions)
   },
   methods: {
@@ -443,6 +444,9 @@ export default {
       getAllCategoryAPI: 'fair/getFairs',
       deleteCategoryAPI: 'fair/deleteFair',
       updateCategoryAPI: 'fair/updateFair',
+    }),
+    ...mapGetters({
+      checkIfLoggedInAPI: 'auth/checkIfLoggedIn',
     }),
     submitToAPI(event, modalname, data) {
       // Response
@@ -564,9 +568,6 @@ export default {
     formatDateToISO(date) {
       let splittedTime = date.split(' ')
       return splittedTime[0] + 'T' + splittedTime[1] + 'Z'
-    },
-    login() {
-      axios.get('https://jsonplaceholder.typicode.com/posts/1').catch(() => {})
     },
     async queueEnableSendButton() {
       await this.$store.dispatch('invokeSendButtonDelay')
