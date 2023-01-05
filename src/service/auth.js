@@ -57,8 +57,6 @@ export default {
 
   getters: {
     checkIfLoggedIn() {
-      console.log('FROM CHECKIFLOGGEDIN')
-      console.log(Boolean(localStorage.getItem('token')))
       return Boolean(localStorage.getItem('token'))
     },
   },

@@ -7,8 +7,6 @@ axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL
 
 axios.interceptors.request.use(
   (request) => {
-    request.headers['Accept-Language'] = 'TR'
-    //console.log('Adding token to header', request)
     const isLoggedIn = store.getters['auth/checkIfLoggedIn']
     if (isLoggedIn) {
       request.headers.Authorization = 'Bearer ' + localStorage.getItem('token')

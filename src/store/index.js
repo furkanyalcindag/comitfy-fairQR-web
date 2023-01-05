@@ -5,6 +5,7 @@ import role from '@/service/role'
 import user from '@/service/user'
 
 import settings from '@/service/Settings'
+import fair from '@/service/fair'
 
 export default createStore({
   state: {
@@ -45,5 +46,6 @@ export default createStore({
     role,
     user,
     settings,
+    fair,
   },
 })

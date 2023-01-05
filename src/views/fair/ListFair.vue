@@ -62,6 +62,10 @@
                 </CTooltip>
               </div>
             </template>
+            <template #item-active="{ active }">
+              <CIcon v-if="active" icon="cil-check-alt" />
+              <CIcon v-else icon="cil-x" />
+            </template>
             <template #item-operations="item">
               <div>
                 <CButtonGroup role="group" size="sm">
@@ -166,11 +170,13 @@
           <CCol md="6">
             <CFormLabel for="add-fair-time-start">Başlangıç Tarihi</CFormLabel>
             <VueCtkDateTimePicker
-              id="EnabledDisabledDatesPicker"
+              id="add-fair-time-start-value"
               v-model="addedItem.startTime"
               locale="tr"
+              only-date
               :minDate="new Date().toISOString()"
-              format="YYYY-MM-DD HH:mm:ss.SSSS"
+              format="YYYY-MM-DD"
+              formatted="ll"
               label="Başlangıç zamanını seçiniz"
               buttonNowTranslation="Şimdiki Zaman"
               @is-hidden="validateAddedItemDateRange()"
@@ -188,11 +194,13 @@
           <CCol md="6">
             <CFormLabel for="add-fair-time-end">Bitiş Tarihi</CFormLabel>
             <VueCtkDateTimePicker
-              id="EnabledDisabledDatesPicker"
+              id="add-fair-time-end-value"
               v-model="addedItem.endTime"
               locale="tr"
+              only-date
               :minDate="addedItem.startTime"
-              format="YYYY-MM-DD HH:mm:ss.SSSS"
+              format="YYYY-MM-DD"
+              formatted="ll"
               label="Bitiş zamanını seçiniz"
               buttonNowTranslation="Şimdiki Zaman"
               @is-hidden="validateAddedItemDateRange()"
@@ -315,19 +323,21 @@
           </CCol>
 
           <CCol md="6">
-            <CFormLabel for="add-fair-time-start">Başlangıç Tarihi</CFormLabel>
+            <CFormLabel for="edit-fair-time-start">Başlangıç Tarihi</CFormLabel>
             <VueCtkDateTimePicker
-              id="EnabledDisabledDatesPicker"
-              v-model="addedItem.startTime"
+              id="edit-fair-time-start-value"
+              v-model="editedItem.startTime"
               locale="tr"
+              only-date
               :minDate="new Date().toISOString()"
-              format="YYYY-MM-DD HH:mm:ss.SSSS"
+              format="YYYY-MM-DD"
+              formatted="ll"
               label="Başlangıç zamanını seçiniz"
               buttonNowTranslation="Şimdiki Zaman"
-              @is-hidden="validateAddedItemDateRange()"
+              @is-hidden="validateEditedItemDateRange()"
             />
             <CFormInput
-              id="add-fair-time-start"
+              id="edit-fair-time-start"
               required
               style="display: none"
               v-model="addedItem.startTime"
@@ -337,22 +347,24 @@
           </CCol>
           <!-- End Date and Time -->
           <CCol md="6">
-            <CFormLabel for="add-fair-time-end">Bitiş Tarihi</CFormLabel>
+            <CFormLabel for="edit-fair-time-end">Bitiş Tarihi</CFormLabel>
             <VueCtkDateTimePicker
-              id="EnabledDisabledDatesPicker"
-              v-model="addedItem.endTime"
+              id="edit-fair-time-end-value"
+              v-model="editedItem.endTime"
               locale="tr"
-              :minDate="addedItem.startTime"
-              format="YYYY-MM-DD HH:mm:ss.SSSS"
+              only-date
+              :minDate="editedItem.startTime"
+              format="YYYY-MM-DD"
+              formatted="ll"
               label="Bitiş zamanını seçiniz"
               buttonNowTranslation="Şimdiki Zaman"
-              @is-hidden="validateAddedItemDateRange()"
+              @is-hidden="validateEditedItemDateRange()"
             />
             <CFormInput
-              id="add-fair-time-end"
+              id="edit-fair-time-end"
               required
               style="display: none"
-              v-model="addedItem.endTime"
+              v-model="editedItem.endTime"
               autocomplete="off"
               feedbackInvalid="Lütfen bir tarih giriniz"
             ></CFormInput>
@@ -379,6 +391,7 @@ import avatar from '@/assets/images/avatars/8.jpg'
 import { mapActions, mapGetters } from 'vuex'
 import fairDTO from '@/models/fairDTO'
 import Toast from '@/models/create_TOAST_dto'
+import router from '@/router'
 // import router from '@/router'
 export default {
   name: 'Colors',
@@ -393,6 +406,7 @@ export default {
         { text: 'Yeri', value: 'place' },
         { text: 'Başlangıç Tarihi', value: 'startDate' },
         { text: 'Bitiş Tarihi', value: 'endDate' },
+        { text: 'Aktiv', value: 'active' },
         { text: 'İşlemler', value: 'operations' },
       ],
       items: [],
@@ -405,6 +419,8 @@ export default {
       editedItem: {
         // Real data
         data: fairDTO.createEmpty(),
+        startTime: null,
+        endTime: null,
       },
       themeColor: '#321fdb',
       itemsSelected: [],
@@ -435,15 +451,17 @@ export default {
   created() {
     // If not logged in
     // Role check is needed here ------------IMPORTANT
-    this.checkIfLoggedInAPI
-    console.log('CONTROLLED')
+    let isLoggedIn = this.checkIfLoggedIn
+    if (isLoggedIn) {
+      router.push({ name: 'Login Admin' })
+    }
     this.getFairs(this.fairTable.serverOptions)
   },
   methods: {
     ...mapActions({
-      getAllCategoryAPI: 'fair/getFairs',
-      deleteCategoryAPI: 'fair/deleteFair',
-      updateCategoryAPI: 'fair/updateFair',
+      getAllFairsAPI: 'fair/getFairs',
+      deleteFairAPI: 'fair/deleteFair',
+      updateFairAPI: 'fair/updateFair',
     }),
     ...mapGetters({
       checkIfLoggedInAPI: 'auth/checkIfLoggedIn',
@@ -517,16 +535,9 @@ export default {
     // eslint-disable-next-line no-unused-vars
     async getFairs(pageOptions) {
       this.fairTable.loading = true
-      this.data = [
-        fairDTO.createFromJson({
-          uuid: 'UUID',
-          name: 'FUAR ADI',
-          place: 'FUAR YERI',
-          startDate: 'BAŞLANGIÇ TARİHİ',
-          endDate: 'BİTİŞ TARİHİ',
-        }),
-      ]
-      this.items = this.data
+      const response = await this.getAllFairsAPI(pageOptions)
+      this.items = response ? response.data : []
+      this.fairTable.serverItemsLength = response.totalElements
       this.fairTable.loading = false
     },
     // Checks if start time is lesser than end time or equal then validate it false
@@ -534,8 +545,8 @@ export default {
       if (this.addedItem.startTime | (this.addedItem.endTime != null)) {
         // Formatting dates to ISO format
         if (
-          Date.parse(this.formatDateToISO(this.addedItem.startTime)) >=
-          Date.parse(this.formatDateToISO(this.addedItem.endTime))
+          Date.parse(this.addedItem.startTime) >
+          Date.parse(this.addedItem.endTime)
         ) {
           this.addedItem.endTime = null
           new Toast(
@@ -551,8 +562,8 @@ export default {
       if (this.editedItem.startTime | (this.editedItem.endTime != null)) {
         // Formatting dates to ISO format
         if (
-          Date.parse(this.formatDateToISO(this.editedItem.startTime)) >=
-          Date.parse(this.formatDateToISO(this.editedItem.endTime))
+          Date.parse(this.editedItem.startTime) >
+          Date.parse(this.editedItem.endTime)
         ) {
           this.editedItem.endTime = null
           new Toast(
