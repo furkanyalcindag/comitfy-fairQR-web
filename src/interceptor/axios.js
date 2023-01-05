@@ -9,7 +9,7 @@ axios.interceptors.request.use(
   (request) => {
     const isLoggedIn = store.getters['auth/checkIfLoggedIn']
     if (isLoggedIn) {
-      request.headers.Authorization = 'Bearer ' + localStorage.getItem('token')
+      // request.headers.Authorization = 'Bearer ' + localStorage.getItem('token')
     } else {
       router.push({ name: 'Login Admin' })
     }
