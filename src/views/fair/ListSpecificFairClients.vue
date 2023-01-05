@@ -16,7 +16,7 @@
                 class="d-flex float-end align-items-center"
                 color="primary"
                 shape="rounded-pill"
-                @click="showModal('addClientModal')"
+                @click="showModal('addParticipantModal')"
                 ><small>Ekle</small></CButton
               >
             </CCol>
@@ -73,7 +73,7 @@
                       content: 'Düzenle',
                       placement: 'top',
                     }"
-                    @click="showModal('updateClientModal', item)"
+                    @click="showModal('updateParticipantModal', item)"
                   >
                     <CIcon icon="cil-pencil" />
                   </CButton>
@@ -86,7 +86,7 @@
                       content: 'Sil',
                       placement: 'top',
                     }"
-                    @click="showModal('deleteClientModal', item)"
+                    @click="showModal('deleteParticipantModal', item)"
                   >
                     <CIcon icon="cil-trash" />
                   </CButton>
@@ -102,8 +102,8 @@
     <CModal
       backdrop="static"
       size="lg"
-      :visible="openedModals.addClientModal"
-      @close="closeModal('addClientModal')"
+      :visible="openedModals.addParticipantModal"
+      @close="closeModal('addParticipantModal')"
     >
       <CModalHeader>
         <CModalTitle>Katılımcı Ekle</CModalTitle>
@@ -113,7 +113,7 @@
           class="row g-3"
           @submit.prevent="
             isAbleToPushButton
-              ? submitToAPI($event, 'addClientModal', addedItem.data)
+              ? submitToAPI($event, 'addParticipantModal', addedItem.data)
               : null
           "
           needs-validation
@@ -189,7 +189,7 @@
           <CModalFooter class="pe-0">
             <CButton
               color="secondary"
-              @click="closeModal('addClientModal', true)"
+              @click="closeModal('addParticipantModal', true)"
               >İptal</CButton
             >
             <CButton
@@ -206,8 +206,8 @@
     <CModal
       backdrop="static"
       size="lg"
-      :visible="openedModals.deleteClientModal"
-      @close="closeModal('deleteClientModal')"
+      :visible="openedModals.deleteParticipantModal"
+      @close="closeModal('deleteParticipantModal')"
     >
       <CModalHeader>
         <CModalTitle
@@ -220,7 +220,9 @@
           <span class="text-danger fw-bolder"> silmek istiyor musunuz? </span>
         </h5>
         <CModalFooter class="pe-0">
-          <CButton color="secondary" @click="closeModal('deleteClientModal')"
+          <CButton
+            color="secondary"
+            @click="closeModal('deleteParticipantModal')"
             >Kapat</CButton
           >
           <CButton
@@ -237,8 +239,8 @@
     <CModal
       backdrop="static"
       size="lg"
-      :visible="openedModals.updateClientModal"
-      @close="closeModal('updateClientModal')"
+      :visible="openedModals.updateParticipantModal"
+      @close="closeModal('updateParticipantModal')"
     >
       <CModalHeader>
         <CModalTitle>Katılımcı Düzenle</CModalTitle>
@@ -248,7 +250,7 @@
           class="row g-3"
           @submit.prevent="
             isAbleToPushButton
-              ? submitToAPI($event, 'updateClientModal', editedItem.data)
+              ? submitToAPI($event, 'updateParticipantModal', editedItem.data)
               : null
           "
           needs-validation
@@ -322,7 +324,9 @@
           </CCol>
 
           <CModalFooter class="pe-0">
-            <CButton color="secondary" @click="closeModal('updateClientModal')"
+            <CButton
+              color="secondary"
+              @click="closeModal('updateParticipantModal')"
               >Kapat</CButton
             >
             <CButton
@@ -343,6 +347,8 @@ import { mapActions, mapGetters } from 'vuex'
 import fairClientDTO from '@/models/fairParticipantDTO'
 import router from '@/router'
 import fairDTO from '@/models/fairDTO'
+import Toast from '@/models/create_TOAST_dto'
+
 export default {
   name: 'Colors',
   components: {
@@ -371,9 +377,9 @@ export default {
       themeColor: '#321fdb',
       itemsSelected: [],
       openedModals: {
-        addClientModal: false,
-        deleteClientModal: false,
-        updateClientModal: false,
+        addParticipantModal: false,
+        deleteParticipantModal: false,
+        updateParticipantModal: false,
       },
       fairClientsTable: {
         serverItemsLength: 0,
@@ -409,6 +415,7 @@ export default {
     ...mapActions({
       getFairAPI: 'fair/getFair',
       getParticipantsByFairAPI: 'fairParticipant/getParticipantsByFair',
+      addParticipantToFairAPI: 'fairParticipant/addParticipantToFair',
       deleteFairAPI: 'fair/deleteFairClient',
       updateFairAPI: 'fair/updateFairClient',
     }),
@@ -427,12 +434,15 @@ export default {
         return
       }
       switch (modalname) {
-        case 'addClientModal':
+        case 'addParticipantModal':
           {
-            this.addCategory(JSON.parse(JSON.stringify(data)))
+            this.addParticipantToFair({
+              participant: JSON.parse(JSON.stringify(data)),
+              fairUUID: this.uuid,
+            })
           }
           break
-        case 'updateClientModal':
+        case 'updateParticipantModal':
           {
             this.updateCategory(JSON.parse(JSON.stringify(data)))
           }
@@ -442,7 +452,7 @@ export default {
     // Setting selectedClient every showmodal trigger is not correct idea. It can cause failures due to this. ------------------IMPORTANT
     async showModal(modalname, data) {
       switch (modalname) {
-        case 'addClientModal':
+        case 'addParticipantModal':
           {
             // If the modal is reseted then reassign current date
             if (this.addedItem.startTime == null) {
@@ -451,7 +461,7 @@ export default {
             }
           }
           break
-        case 'updateClientModal':
+        case 'updateParticipantModal':
           {
             this.selectedClient = data ? JSON.parse(JSON.stringify(data)) : {}
           }
@@ -464,7 +474,7 @@ export default {
       this.validationChecked = false
       if (resetData) {
         switch (modalname) {
-          case 'addClientModal':
+          case 'addParticipantModal':
             {
               // Restore added item on clicking "No/Deny"
               this.addedItem = {
@@ -472,7 +482,7 @@ export default {
               }
             }
             break
-          case 'deleteClientModal':
+          case 'deleteParticipantModal':
             {
               this.selectedClient = {}
             }
@@ -480,11 +490,6 @@ export default {
         }
       }
       this.queueEnableSendButton()
-    },
-    // eslint-disable-next-line no-unused-vars
-    async queueEnableSendButton() {
-      await this.$store.dispatch('invokeSendButtonDelay')
-      this.isAbleToPushButton = true
     },
     async getFair({ uuid = null }) {
       this.fairClientsTable.loading = true
@@ -498,7 +503,7 @@ export default {
           : null
         this.getFairParticipants({
           pageOptions: this.fairClientsTable.serverOptions,
-          fairUUID: this.selectedFair.uuid,
+          fairUUID: this.uuid,
         })
       }
     },
@@ -512,6 +517,38 @@ export default {
       this.items = response ? response.data : []
       this.fairClientsTable.serverItemsLength = response.totalElements
       this.fairClientsTable.loading = false
+    },
+    async addParticipantToFair({ participant, fairUUID }) {
+      const response = await this.addParticipantToFairAPI({
+        participant: this.addedItem.data,
+        fairUUID: fairUUID,
+      })
+      if (response == true) {
+        new Toast(
+          'New role ' + participant.firstName + ' added successfully',
+          'success',
+          true,
+          'text-white align-items-center',
+        )
+        this.closeModal('addParticipantModal', true)
+        this.getFairParticipants({
+          pageOptions: this.fairClientsTable.serverOptions,
+          fairUUID: this.uuid,
+        })
+      } else {
+        new Toast(
+          'Something went wrong',
+          'danger',
+          true,
+          'text-white align-items-center',
+        )
+        this.queueEnableSendButton()
+      }
+    },
+    // eslint-disable-next-line no-unused-vars
+    async queueEnableSendButton() {
+      await this.$store.dispatch('invokeSendButtonDelay')
+      this.isAbleToPushButton = true
     },
   },
 }
