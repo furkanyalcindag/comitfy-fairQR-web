@@ -1,6 +1,6 @@
-export default class FairClientDTO {
+export default class FairParticipantDTO {
   static createEmpty() {
-    return new FairClientDTO({})
+    return new FairParticipantDTO({})
   }
 
   static createFromJson({
@@ -11,7 +11,7 @@ export default class FairClientDTO {
     email,
     companyName,
   }) {
-    return new FairClientDTO({
+    return new FairParticipantDTO({
       uuid: uuid,
       firstName: firstName,
       lastName: lastName,

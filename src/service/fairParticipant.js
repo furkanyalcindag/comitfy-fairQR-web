@@ -1,4 +1,5 @@
 import fairDTO from '@/models/fairDTO'
+import FairParticipantDTO from '@/models/fairParticipantDTO'
 import router from '@/router'
 import store from '@/store/'
 export default {
@@ -6,7 +7,7 @@ export default {
   state: {},
   mutations: {},
   actions: {
-    async getFairs(state, page) {
+    async getParticipantsByFair(state, { page = {}, fairUUID = null }) {
       // CHECK IF USER LOGGED IN ALREADY
       if (store.getters['auth/checkIfLoggedIn']) {
         // ROLE CHECK IS NEEDED HERE DUE BY SECURITY -----------IMPORTANT
@@ -19,7 +20,7 @@ export default {
         })
         var config = {
           method: 'post',
-          url: 'fair/get-all-by-filter',
+          url: 'fair-participant/get-participants-by-fair/' + fairUUID,
           headers: {
             'Content-Type': 'application/json',
           },
@@ -39,15 +40,17 @@ export default {
         router.push({ name: 'Login Admin' })
       }
     },
-    async addFair(state, fairData) {
+    /* eslint-disable */
+    async addParticipantToFair(state, { participant = null, fairUUID = null }) {
       if (store.getters['auth/checkIfLoggedIn']) {
         // ROLE CHECK IS NEEDED HERE DUE BY SECURITY --------------IMPORTANT
         var axios = require('axios')
-        var data = JSON.stringify(fairData)
-        console.log(data)
+        var data = FairParticipantDTO.createFromJson(
+          JSON.parse(JSON.stringify(participant)),
+        )
         var config = {
           method: 'post',
-          url: 'fair/',
+          url: 'fair-participant/add-participant-by-fair/' + fairUUID,
           headers: {
             'Content-Type': 'application/json',
           },

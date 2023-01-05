@@ -20,6 +20,7 @@
           </CRow>
         </CCardHeader>
         <CCardBody class="p-0">
+          FUAR AKTIFLIGI EKLENEBILMELI VE GUNCELLENEBILMELI EDILEBILMELI
           <easy-data-table
             show-index
             v-model:itemsSelected="itemsSelected"
@@ -107,12 +108,13 @@
                     @click="
                       $router.push({
                         name: 'FairClientList',
-                        params: { id: item.uuid },
+                        params: { uuid: item.uuid },
                       })
                     "
                   >
                     <CIcon icon="cil-list" />
                   </CButton>
+                  {{ item.uuid }}
                 </CButtonGroup>
               </div>
             </template>

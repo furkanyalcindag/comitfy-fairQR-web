@@ -1,11 +1,14 @@
 <template>
   <CRow>
     <CCol class="justify-content-start">
-      <CCard>
+      <CSpinner v-if="isLoadingFair" color="dark" />
+      <CCard v-else-if="isLoadingFair === false">
         <CCardHeader>
           <CRow class="align-content-start">
             <CCol xs="10" md="10" sm="10">
-              Fuar İsmi Fuar Yeri Fuar Başlama Saati Fuar Bitiş Saati
+              {{ selectedFair.name }} | {{ selectedFair.place }} |
+              {{ selectedFair.startDate }} - {{ selectedFair.endDate }} |
+              {{ selectedFair.active ? 'Aktif' : 'Aktif Değil' }}
             </CCol>
             <CCol>
               <CButton
@@ -93,6 +96,7 @@
           </easy-data-table>
         </CCardBody>
       </CCard>
+      <h2 v-else class="text-center">Fuar Bulunamadı</h2>
     </CCol>
     <!-- Add Fair -->
     <CModal
@@ -336,17 +340,15 @@
 <script>
 import avatar from '@/assets/images/avatars/8.jpg'
 import { mapActions, mapGetters } from 'vuex'
-import fairClientDTO from '@/models/fairClientDTO'
+import fairClientDTO from '@/models/fairParticipantDTO'
 import router from '@/router'
-// import router from '@/router'
-// import Toast from '@/models/create_TOAST_dto'
+import fairDTO from '@/models/fairDTO'
 export default {
   name: 'Colors',
   components: {
     EasyDataTable: window['vue3-easy-data-table'],
   },
-  props: ['id'],
-
+  props: ['uuid'],
   data() {
     return {
       avatar: avatar,
@@ -385,6 +387,8 @@ export default {
       validationChecked: false,
       isAbleToPushButton: true,
       selectedClient: {},
+      selectedFair: fairDTO.createEmpty(),
+      isLoadingFair: true,
     }
   },
   watch: {
@@ -399,13 +403,14 @@ export default {
     if (isLoggedIn) {
       router.push({ name: 'Login Admin' })
     }
-    this.getFairs(this.fairClientsTable.serverOptions)
+    this.getFair({ uuid: this.uuid })
   },
   methods: {
     ...mapActions({
-      getAllCategoryAPI: 'fair/getFairClients',
-      deleteCategoryAPI: 'fair/deleteFairClient',
-      updateCategoryAPI: 'fair/updateFairClient',
+      getFairAPI: 'fair/getFair',
+      getParticipantsByFairAPI: 'fairParticipant/getParticipantsByFair',
+      deleteFairAPI: 'fair/deleteFairClient',
+      updateFairAPI: 'fair/updateFairClient',
     }),
     ...mapGetters({
       checkIfLoggedInAPI: 'auth/checkIfLoggedIn',
@@ -477,24 +482,36 @@ export default {
       this.queueEnableSendButton()
     },
     // eslint-disable-next-line no-unused-vars
-    async getFairs(pageOptions) {
-      this.fairClientsTable.loading = true
-      this.data = [
-        fairClientDTO.createFromJson({
-          uuid: 'UUID',
-          firstName: 'İSİM',
-          lastName: 'SOYİSİM',
-          mobilePhone: 'MOBILE PHONE',
-          companyName: 'COMPANY NAME',
-          email: 'EMAIL',
-        }),
-      ]
-      this.items = this.data
-      this.fairClientsTable.loading = false
-    },
     async queueEnableSendButton() {
       await this.$store.dispatch('invokeSendButtonDelay')
       this.isAbleToPushButton = true
+    },
+    async getFair({ uuid = null }) {
+      this.fairClientsTable.loading = true
+      const response = await this.getFairAPI(uuid)
+      if (response == null) {
+        this.isLoadingFair = null
+      } else {
+        this.isLoadingFair = false
+        this.selectedFair = response
+          ? fairDTO.createFromJson(JSON.parse(JSON.stringify(response)))
+          : null
+        this.getFairParticipants({
+          pageOptions: this.fairClientsTable.serverOptions,
+          fairUUID: this.selectedFair.uuid,
+        })
+      }
+    },
+    async getFairParticipants({ pageOptions, fairUUID }) {
+      this.fairClientsTable.loading = true
+      console.log(pageOptions, fairUUID)
+      const response = await this.getParticipantsByFairAPI({
+        page: pageOptions,
+        fairUUID: fairUUID,
+      })
+      this.items = response ? response.data : []
+      this.fairClientsTable.serverItemsLength = response.totalElements
+      this.fairClientsTable.loading = false
     },
   },
 }

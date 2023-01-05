@@ -21,7 +21,7 @@ const routes = [
         redirect: '/fair/list',
         children: [
           {
-            path: '/fair/client-list/:id',
+            path: '/fair/client-list/:uuid',
             name: 'FairClientList',
             component: () => import('@/views/fair/ListSpecificFairClients.vue'),
             props: true,
