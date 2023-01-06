@@ -135,6 +135,7 @@ export default {
       var axios = require('axios')
       var config = {
         method: 'get',
+        // The uuid must be participantUUID ------------IMPORTANT
         url:
           'fair-participant/generate-ticket/' +
           '9adc7311-7658-43e8-89d8-2c75a01c1a08',
