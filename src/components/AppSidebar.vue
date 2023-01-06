@@ -12,11 +12,12 @@
     "
   >
     <CSidebarBrand>
-      <CIcon
+      <!-- <CIcon
         custom-class-name="sidebar-brand-full"
         :icon="logoNegative"
         :height="35"
-      />
+      /> -->
+      <h2 style="color: #5085a5">Comitfy</h2>
       <CIcon
         custom-class-name="sidebar-brand-narrow"
         :icon="sygnet"

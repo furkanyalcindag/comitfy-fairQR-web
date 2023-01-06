@@ -577,7 +577,6 @@
 </template>
 
 <script>
-import avatar from '@/assets/images/avatars/8.jpg'
 import { mapActions } from 'vuex'
 import Toast from '@/models/create_TOAST_dto'
 import ContractDTO from '@/models/ContractDTO'
@@ -589,7 +588,6 @@ export default {
   },
   data() {
     return {
-      avatar: avatar,
       headers: [
         { text: 'Sözleşme Adı', value: 'title', sortable: true },
         { text: 'İçeriği', value: 'content', sortable: true },

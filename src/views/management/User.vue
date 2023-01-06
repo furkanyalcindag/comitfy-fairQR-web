@@ -325,7 +325,6 @@
 </template>
 
 <script>
-import avatar from '@/assets/images/avatars/8.jpg'
 import { mapActions } from 'vuex'
 import Toast from '@/models/create_TOAST_dto'
 import userInfoDTO from '@/models/userInfoDTO'
@@ -336,7 +335,6 @@ export default {
   },
   data() {
     return {
-      avatar: avatar,
       headers: [
         { text: 'İsim', value: 'firstName', sortable: true },
         { text: 'Soyisim', value: 'lastName', sortable: true },

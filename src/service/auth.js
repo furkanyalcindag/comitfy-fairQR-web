@@ -14,6 +14,7 @@ export default {
       if (localStorage.getItem('token')) {
         localStorage.removeItem('token')
       }
+      router.push({ name: 'Login Admin' })
     },
   },
   actions: {
@@ -46,6 +47,10 @@ export default {
       return response
     },
 
+    async attemptLogOut() {
+      store.dispatch('auth/attemptRestore')
+    },
+
     async attempt({ commit }, data) {
       commit('LOG_IN', data)
     },
@@ -53,6 +58,7 @@ export default {
     async attemptRestore({ commit }) {
       commit('LOG_OUT')
     },
+
     checkIfLoggedIn() {
       if (localStorage.getItem('token')) {
         store.state.isLoggedIn = true

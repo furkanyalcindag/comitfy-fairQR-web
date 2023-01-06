@@ -34,14 +34,14 @@
                   <span v-if="isFailedToLogin" class="text-danger">{{
                     failedToLoginText
                   }}</span>
-                  <CRow>
+                  <!-- <CRow>
                     <CListGroupItem>
                       <CFormCheck
                         label="Beni Hatırla"
                         class="float-end"
                         v-model="isRememberUseActive"
                       /> </CListGroupItem
-                  ></CRow>
+                  ></CRow> -->
 
                   <CRow>
                     <CCol :xs="6">
@@ -53,16 +53,16 @@
                         Giriş
                       </CButton>
                     </CCol>
-                    <CCol :xs="6" class="text-right">
+                    <!-- <CCol :xs="6" class="text-right">
                       <CButton color="link" class="px-0">
                         Şifrenizi mi unuttunuz?
                       </CButton>
-                    </CCol>
+                    </CCol> -->
                   </CRow>
                 </CForm>
               </CCardBody>
             </CCard>
-            <CCard class="text-white bg-secondary py-5" style="width: 44%">
+            <CCard class="text-white bg-secondary py-5">
               <CCardBody class="text-center">
                 <div>
                   <h2>Kaydol</h2>

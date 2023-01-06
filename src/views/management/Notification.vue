@@ -423,7 +423,6 @@
 </template>
 
 <script>
-import avatar from '@/assets/images/avatars/8.jpg'
 import notificationDTO from '@/models/NotificationDTO'
 import { mapActions } from 'vuex'
 import Toast from '@/models/create_TOAST_dto'
@@ -434,7 +433,6 @@ export default {
   },
   data() {
     return {
-      avatar: avatar,
       headers: [
         { text: 'Başlık', value: 'title', sortable: true },
         { text: 'Mesaj', value: 'message' },

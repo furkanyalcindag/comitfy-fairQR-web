@@ -300,7 +300,6 @@
 </template>
 
 <script>
-import avatar from '@/assets/images/avatars/8.jpg'
 import { mapActions } from 'vuex'
 import createCategoryDTO from '@/models/create_CATEGORY_dto'
 import Toast from '@/models/create_TOAST_dto'
@@ -311,7 +310,6 @@ export default {
   },
   data() {
     return {
-      avatar: avatar,
       headers: [
         { text: 'Kategori Adı', value: 'name', sortable: true },
         { text: 'Toplam Makale Sayısı', value: 'articleCount' },

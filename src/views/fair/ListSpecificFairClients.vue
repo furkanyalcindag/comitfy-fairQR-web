@@ -348,7 +348,6 @@
 </template>
 
 <script>
-import avatar from '@/assets/images/avatars/8.jpg'
 import { mapActions } from 'vuex'
 import fairClientDTO from '@/models/fairParticipantDTO'
 import fairDTO from '@/models/fairDTO'
@@ -363,7 +362,6 @@ export default {
   props: ['uuid'],
   data() {
     return {
-      avatar: avatar,
       headers: [
         { text: 'İsim', value: 'name', sortable: true },
         { text: 'Firma Adı', value: 'companyName' },

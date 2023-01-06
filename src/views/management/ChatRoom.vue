@@ -555,7 +555,6 @@
 </template>
 
 <script>
-import avatar from '@/assets/images/avatars/8.jpg'
 import chatRoomDTO from '@/models/ChatRoomDTO'
 import { mapActions } from 'vuex'
 import Toast from '@/models/create_TOAST_dto'
@@ -566,7 +565,6 @@ export default {
   },
   data() {
     return {
-      avatar: avatar,
       headers: [
         { text: 'Chat Odası Adı', value: 'name', sortable: true },
         { text: 'Katılımcı Limiti', value: 'userLimit' },

@@ -208,7 +208,6 @@
 </template>
 
 <script>
-import avatar from '@/assets/images/avatars/8.jpg'
 import { mapActions } from 'vuex'
 import patientDTO from '@/models/patientDTO'
 import Toast from '@/models/create_TOAST_dto'
@@ -219,7 +218,6 @@ export default {
   },
   data() {
     return {
-      avatar: avatar,
       headers: [
         { text: 'Hasta Adı Soyadı', value: 'name', sortable: true },
         { text: 'Telefon', value: 'phone' },

@@ -158,7 +158,6 @@
 
 <script>
 /* eslint-disable */
-import avatar from '@/assets/images/avatars/8.jpg'
 import Toast from '@/models/create_TOAST_dto'
 import createArticleDTO from '@/models/create_ARTICLE_dto'
 import { mapActions } from 'vuex'
@@ -167,7 +166,6 @@ export default {
   components: {},
   data() {
     return {
-      avatar: avatar,
       headers: [],
       items: [],
       addedItem: {

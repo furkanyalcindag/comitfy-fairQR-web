@@ -247,7 +247,6 @@
 </template>
 
 <script>
-import avatar from '@/assets/images/avatars/8.jpg'
 import settingsDTO from '@/models/SettingsDTO'
 import { mapActions } from 'vuex'
 import Toast from '@/models/create_TOAST_dto'
@@ -258,7 +257,6 @@ export default {
   },
   data() {
     return {
-      avatar: avatar,
       headers: [
         { text: 'Anahtar Kelime', value: 'key', sortable: true },
         { text: 'Değer', value: 'value' },
