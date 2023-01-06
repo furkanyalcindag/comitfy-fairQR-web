@@ -1,8 +1,10 @@
 <template>
   <CRow>
-    <CCol class="justify-content-start">
-      <CSpinner v-if="isLoadingFair" color="dark" />
-      <CCard v-else-if="isLoadingFair === false">
+    <CRow v-if="isLoadingFair" class="justify-content-center">
+      <CSpinner color="dark" />
+    </CRow>
+    <CCol v-else-if="isLoadingFair === false" class="justify-content-start">
+      <CCard>
         <CCardHeader>
           <CRow class="align-content-start">
             <CCol xs="10" md="10" sm="10">
@@ -33,14 +35,14 @@
           <easy-data-table
             show-index
             v-model:itemsSelected="itemsSelected"
-            v-model:server-options="fairClientsTable.serverOptions"
-            :server-items-length="fairClientsTable.serverItemsLength"
+            v-model:server-options="fairParticipantsTable.serverOptions"
+            :server-items-length="fairParticipantsTable.serverItemsLength"
             :headers="headers"
             :items="items"
             :theme-color="themeColor"
             buttons-pagination
-            :loading="fairClientsTable.loading"
-            :rows-items="fairClientsTable.rowsItem"
+            :loading="fairParticipantsTable.loading"
+            :rows-items="fairParticipantsTable.rowsItem"
           >
             <template #item-name="{ firstName, lastName }">
               <div>{{ firstName }} {{ lastName }}</div>
@@ -96,9 +98,9 @@
           </easy-data-table>
         </CCardBody>
       </CCard>
-      <h2 v-else class="text-center">Fuar Bulunamadı</h2>
     </CCol>
-    <!-- Add Fair -->
+    <h2 v-else class="text-center">Fuar Bulunamadı</h2>
+    <!-- Add FairParticipant -->
     <CModal
       backdrop="static"
       size="lg"
@@ -202,7 +204,7 @@
         </CForm>
       </CModalBody>
     </CModal>
-    <!-- Delete Fair -->
+    <!-- Delete FairParticipant -->
     <CModal
       backdrop="static"
       size="lg"
@@ -228,14 +230,18 @@
           <CButton
             color="danger"
             @click="
-              isAbleToPushButton ? deleteCategory(selectedClient.uuid) : null
+              isAbleToPushButton
+                ? deleteParticipant({
+                    participantUUID: selectedParticipant.uuid,
+                  })
+                : null
             "
             >SİL</CButton
           >
         </CModalFooter>
       </CModalBody>
     </CModal>
-    <!-- Update Fair -->
+    <!-- Update FairParticipant -->
     <CModal
       backdrop="static"
       size="lg"
@@ -348,6 +354,7 @@ import fairClientDTO from '@/models/fairParticipantDTO'
 import router from '@/router'
 import fairDTO from '@/models/fairDTO'
 import Toast from '@/models/create_TOAST_dto'
+import FairParticipantDTO from '@/models/fairParticipantDTO'
 
 export default {
   name: 'Colors',
@@ -381,7 +388,7 @@ export default {
         deleteParticipantModal: false,
         updateParticipantModal: false,
       },
-      fairClientsTable: {
+      fairParticipantsTable: {
         serverItemsLength: 0,
         serverOptions: {
           page: 1,
@@ -392,14 +399,14 @@ export default {
       },
       validationChecked: false,
       isAbleToPushButton: true,
-      selectedClient: {},
+      selectedParticipant: {},
       selectedFair: fairDTO.createEmpty(),
       isLoadingFair: true,
     }
   },
   watch: {
-    'fairClientsTable.serverOptions'(newvalue) {
-      this.getFairs(newvalue)
+    'fairParticipantsTable.serverOptions'(newvalue) {
+      this.getFairParticipants({ pageOptions: newvalue, fairUUID: this.uuid })
     },
   },
   created() {
@@ -416,8 +423,8 @@ export default {
       getFairAPI: 'fair/getFair',
       getParticipantsByFairAPI: 'fairParticipant/getParticipantsByFair',
       addParticipantToFairAPI: 'fairParticipant/addParticipantToFair',
-      deleteFairAPI: 'fair/deleteFairClient',
-      updateFairAPI: 'fair/updateFairClient',
+      deletePaticipantAPI: 'fairParticipant/deleteParticipant',
+      updateParticipantAPI: 'fairParticipant/updateParticipant',
     }),
     ...mapGetters({
       checkIfLoggedInAPI: 'auth/checkIfLoggedIn',
@@ -444,26 +451,34 @@ export default {
           break
         case 'updateParticipantModal':
           {
-            this.updateCategory(JSON.parse(JSON.stringify(data)))
+            this.updateParticipant({
+              newParticipantData: JSON.parse(JSON.stringify(data)),
+            })
           }
           break
       }
     },
-    // Setting selectedClient every showmodal trigger is not correct idea. It can cause failures due to this. ------------------IMPORTANT
+    // Setting selectedParticipant every showmodal trigger is not correct idea. It can cause failures due to this. ------------------IMPORTANT
     async showModal(modalname, data) {
       switch (modalname) {
         case 'addParticipantModal':
-          {
-            // If the modal is reseted then reassign current date
-            if (this.addedItem.startTime == null) {
-              this.addedItem.startTime = new Date().toISOString()
-              this.addedItem.endTime = null
-            }
-          }
           break
         case 'updateParticipantModal':
           {
-            this.selectedClient = data ? JSON.parse(JSON.stringify(data)) : {}
+            this.selectedParticipant = data
+              ? JSON.parse(JSON.stringify(data))
+              : {}
+            let cachedItemData = JSON.parse(JSON.stringify(data))
+            this.editedItem.data = cachedItemData
+          }
+          break
+        case 'deleteParticipantModal':
+          {
+            this.selectedParticipant = data
+              ? FairParticipantDTO.createFromJson(
+                  JSON.parse(JSON.stringify(data)),
+                )
+              : {}
           }
           break
       }
@@ -484,15 +499,16 @@ export default {
             break
           case 'deleteParticipantModal':
             {
-              this.selectedClient = {}
+              this.selectedParticipant = FairParticipantDTO.createEmpty()
             }
             break
         }
       }
       this.queueEnableSendButton()
     },
+    // NAMED PARAMETER NEEDED FOR API ---------IMPORTANT
     async getFair({ uuid = null }) {
-      this.fairClientsTable.loading = true
+      this.fairParticipantsTable.loading = true
       const response = await this.getFairAPI(uuid)
       if (response == null) {
         this.isLoadingFair = null
@@ -502,25 +518,25 @@ export default {
           ? fairDTO.createFromJson(JSON.parse(JSON.stringify(response)))
           : null
         this.getFairParticipants({
-          pageOptions: this.fairClientsTable.serverOptions,
+          pageOptions: this.fairParticipantsTable.serverOptions,
           fairUUID: this.uuid,
         })
       }
     },
     async getFairParticipants({ pageOptions, fairUUID }) {
-      this.fairClientsTable.loading = true
+      this.fairParticipantsTable.loading = true
       console.log(pageOptions, fairUUID)
       const response = await this.getParticipantsByFairAPI({
         page: pageOptions,
         fairUUID: fairUUID,
       })
       this.items = response ? response.data : []
-      this.fairClientsTable.serverItemsLength = response.totalElements
-      this.fairClientsTable.loading = false
+      this.fairParticipantsTable.serverItemsLength = response.totalElements
+      this.fairParticipantsTable.loading = false
     },
     async addParticipantToFair({ participant, fairUUID }) {
       const response = await this.addParticipantToFairAPI({
-        participant: this.addedItem.data,
+        participant: participant,
         fairUUID: fairUUID,
       })
       if (response == true) {
@@ -532,7 +548,7 @@ export default {
         )
         this.closeModal('addParticipantModal', true)
         this.getFairParticipants({
-          pageOptions: this.fairClientsTable.serverOptions,
+          pageOptions: this.fairParticipantsTable.serverOptions,
           fairUUID: this.uuid,
         })
       } else {
@@ -541,6 +557,59 @@ export default {
           'danger',
           true,
           'text-white align-items-center',
+        )
+        this.queueEnableSendButton()
+      }
+    },
+    async updateParticipant({ newParticipantData }) {
+      const response = await this.updateParticipantAPI({
+        participantData: newParticipantData,
+      })
+      if (response === true) {
+        new Toast(
+          'ChatRoom updated successfully',
+          'success',
+          true,
+          'text-white align-items-center',
+        )
+        this.getFairParticipants({
+          pageOptions: this.fairParticipantsTable.serverOptions,
+          fairUUID: this.uuid,
+        })
+        this.closeModal('updateParticipantModal')
+      } else {
+        new Toast(
+          'Something went wrong',
+          'danger',
+          true,
+          'text-white align-items-center',
+        )
+        this.queueEnableSendButton()
+      }
+    },
+    async deleteParticipant({ participantUUID = null }) {
+      this.isAbleToPushButton = false
+      const response = await this.deletePaticipantAPI({
+        participantUUID: participantUUID,
+      })
+      if (response === true) {
+        new Toast(
+          'Deleted successfully',
+          'success',
+          true,
+          'text-white align-items-center',
+        )
+        this.getFairParticipants({
+          pageOptions: this.fairParticipantsTable.serverOptions,
+          fairUUID: this.uuid,
+        })
+        this.closeModal('deleteParticipantModal', true)
+      } else {
+        new Toast(
+          'Something went wrong',
+          'danger',
+          true,
+          'text-white -align-items-center',
         )
         this.queueEnableSendButton()
       }

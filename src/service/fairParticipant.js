@@ -1,4 +1,3 @@
-import fairDTO from '@/models/fairDTO'
 import FairParticipantDTO from '@/models/fairParticipantDTO'
 import router from '@/router'
 import store from '@/store/'
@@ -71,15 +70,43 @@ export default {
         router.push({ name: 'Login Admin' })
       }
     },
-    async updateFair(state, fairData) {
+    async deleteParticipant(state, { participantUUID = null }) {
+      if (store.getters['auth/checkIfLoggedIn']) {
+        // ROLE CHECK IS NEEDED HERE DUE BY SECURITY ----------IMPORTANT
+        var axios = require('axios')
+        var config = {
+          method: 'delete',
+          url: 'fair-participant/' + participantUUID,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+        const response = await axios(config)
+          .then(function (response) {
+            console.log(JSON.stringify(response.data))
+            return true
+          })
+          .catch(function (error) {
+            console.log(error)
+            return false
+          })
+        return response
+      } else {
+        // ROLE CHECK IS NEEDED HERE -------IMPORTANT
+        router.push({ name: 'Login Admin' })
+      }
+    },
+    async updateParticipant(state, { participantData = null }) {
       if (store.getters['auth/checkIfLoggedIn']) {
         // ROLE CHECK IS NEEDED HERE DUE BY SECURITY --------IMPORTANT
         var axios = require('axios')
-        var data = fairDTO.createFromJson(JSON.parse(JSON.stringify(fairData)))
+        var data = FairParticipantDTO.createFromJson(
+          JSON.parse(JSON.stringify(participantData)),
+        )
         console.log(data)
         var config = {
           method: 'put',
-          url: 'fair/' + fairData.uuid,
+          url: 'fair-participant/' + data.uuid,
           headers: {
             'Content-Type': 'application/json',
           },
@@ -96,59 +123,7 @@ export default {
           })
         return response
       } else {
-        // ROLE CHECK IS NEEDED HERE
-        router.push({ name: 'Login Admin' })
-      }
-    },
-    async deleteFair(state, uuid) {
-      if (store.getters['auth/checkIfLoggedIn']) {
-        // ROLE CHECK IS NEEDED HERE DUE BY SECURITY
-        var axios = require('axios')
-        var config = {
-          method: 'delete',
-          url: 'fair/' + uuid,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-        const response = await axios(config)
-          .then(function (response) {
-            console.log(JSON.stringify(response.data))
-            return true
-          })
-          .catch(function (error) {
-            console.log(error)
-            return false
-          })
-        return response
-      } else {
-        // ROLE CHECK IS NEEDED HERE
-        router.push({ name: 'Login Admin' })
-      }
-    },
-    async getFair(state, uuid) {
-      // CHECK IF USER LOGGED IN ALREADY
-      if (store.getters['auth/checkIfLoggedIn']) {
-        // ROLE CHECK IS NEEDED HERE DUE BY SECURITY -----------IMPORTANT
-        var axios = require('axios')
-        var config = {
-          method: 'get',
-          url: 'fair/' + uuid,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-        const response = await axios(config)
-          .then(function (response) {
-            return response.data
-          })
-          .catch(function (error) {
-            console.log(error)
-            return null
-          })
-        return response
-      } else {
-        // ROLE CHECK IS NEEDED HERE DUE BY SECURITY -----------IMPORTANT
+        // ROLE CHECK IS NEEDED HERE -----------IMPORTANT
         router.push({ name: 'Login Admin' })
       }
     },

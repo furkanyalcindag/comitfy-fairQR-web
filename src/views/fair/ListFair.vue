@@ -232,6 +232,14 @@
                 no-label
               /> -->
           </CCol>
+          <!-- Active State -->
+          <CCol md="12">
+            <CFormSwitch
+              label="Aktif mi?"
+              id="add-fair-active"
+              v-model="addedItem.data.active"
+            />
+          </CCol>
 
           <CModalFooter class="pe-0">
             <CButton color="secondary" @click="closeModal('addFairModal', true)"
@@ -370,6 +378,15 @@
               autocomplete="off"
               feedbackInvalid="Lütfen bir tarih giriniz"
             ></CFormInput>
+          </CCol>
+
+          <!-- Active State -->
+          <CCol md="12">
+            <CFormSwitch
+              label="Aktif mi?"
+              id="edit-fair-active"
+              v-model="editedItem.data.active"
+            />
           </CCol>
 
           <CModalFooter class="pe-0">
