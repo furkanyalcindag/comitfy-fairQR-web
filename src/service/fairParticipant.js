@@ -106,6 +106,31 @@ export default {
         })
       return response
     },
+    async addParticipantToCurrentActiveFair(state, { participantData = null }) {
+      // ROLE CHECK IS NEEDED HERE DUE BY SECURITY --------------IMPORTANT
+      var axios = require('axios')
+      var data = FairParticipantDTO.createFromJson(
+        JSON.parse(JSON.stringify(participantData)),
+      )
+      var config = {
+        method: 'post',
+        url: '/fair-participant/add-participant-by-fair',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      }
+      const response = await axios(config)
+        .then(function (response) {
+          console.log(JSON.stringify(response.data.firstName))
+          return true
+        })
+        .catch(function (error) {
+          console.log(error)
+          return false
+        })
+      return response
+    },
   },
   getters: {},
 }

@@ -5,120 +5,103 @@
         <CCol :md="9" :lg="7" :xl="6">
           <CCard class="mx-4">
             <CCardBody class="p-4">
-              <CForm>
-                <CButton
-                  color="dark"
-                  variant="outline"
-                  class="mt-3"
-                  @click="navigateTo('Login Admin')"
-                >
-                  Giriş sayfasına dön
-                </CButton>
-                <h1>Kaydol</h1>
-                <p class="text-medium-emphasis">Yeni Bir Hesap Oluştur</p>
+              <CForm
+                @submit.prevent="
+                  isAbleToPushButton
+                    ? submitToAPI({
+                        event: $event,
+                        newParticipantData: addedItem.data,
+                      })
+                    : null
+                "
+                needs-validation
+                novalidate
+                :validated="validationChecked"
+              >
+                <CRow class="text-center">
+                  <h1>Kaydol</h1>
+                  <p class="text-medium-emphasis">Yeni Bir Hesap Oluştur</p>
+                </CRow>
                 <CInputGroup class="mb-3">
                   <CInputGroupText>
                     <CIcon icon="cil-user" />
-                  </CInputGroupText>
-                  <CFormInput placeholder="Ad" autocomplete="firstName" />
-                </CInputGroup>
-                <CInputGroup class="mb-3">
-                  <CInputGroupText>
-                    <CIcon icon="cil-user" />
-                  </CInputGroupText>
-                  <CFormInput placeholder="Soyad" autocomplete="lastName" />
-                </CInputGroup>
-                <CInputGroup class="mb-3">
-                  <CInputGroupText>
-                    <CIcon icon="cil-drop" />
-                  </CInputGroupText>
-                  <CFormInput placeholder="Branş" autocomplete="branch" />
-                </CInputGroup>
-                <CInputGroup class="mb-3">
-                  <CInputGroupText>
-                    <CIcon icon="cil-drop" />
                   </CInputGroupText>
                   <CFormInput
-                    placeholder="Diploma Numarası"
-                    autocomplete="diplomaNo"
+                    id="add-participant-firstname"
+                    required
+                    feedbackInvalid="Lütfen adınızı giriniz"
+                    placeholder="Ad"
+                    v-model="addedItem.data.firstName"
+                    autocomplete="off"
                   />
                 </CInputGroup>
-                <CRow>
-                  <CCol>
-                    <CFormSelect
-                      size="md"
-                      class="mb-3"
-                      aria-label="Medium select example"
-                    >
-                      <option>Cinsiyet</option>
-                      <option value="1">Kadın</option>
-                      <option value="2">Erkek</option>
-                      <option value="3">Diğer</option>
-                      <option value="3">Belirtmek İstemiyorum</option>
-                    </CFormSelect>
-                  </CCol>
-                  <CCol>
-                    <CFormSelect
-                      size="md"
-                      class="mb-3"
-                      aria-label="Medium select example"
-                    >
-                      <option>Yaş Aralığı</option>
-                      <option value="1">17-</option>
-                      <option value="2">18-24</option>
-                      <option value="3">25-34</option>
-                      <option value="3">35-44</option>
-                      <option value="3">45-54</option>
-                      <option value="3">55+</option>
-                    </CFormSelect>
-                  </CCol>
-                </CRow>
-
+                <CInputGroup class="mb-3">
+                  <CInputGroupText>
+                    <CIcon icon="cil-user" />
+                  </CInputGroupText>
+                  <CFormInput
+                    id="add-participant-lastname"
+                    required
+                    feedbackInvalid="Lütfen soyadınızı giriniz"
+                    placeholder="Soyad"
+                    v-model="addedItem.data.lastName"
+                    autocomplete="off"
+                  />
+                </CInputGroup>
+                <CInputGroup class="mb-3">
+                  <CInputGroupText>
+                    <CIcon icon="cil-phone" />
+                  </CInputGroupText>
+                  <CFormInput
+                    id="add-participant-mobilephone"
+                    required
+                    feedbackInvalid="Lütfen telefon numaranızı giriniz"
+                    placeholder="Tel No"
+                    v-model="addedItem.data.mobilePhone"
+                    autocomplete="off"
+                  />
+                </CInputGroup>
                 <CInputGroup class="mb-3">
                   <CInputGroupText>@</CInputGroupText>
-                  <CFormInput placeholder="Email" autocomplete="email" />
+                  <CFormInput
+                    id="add-participant-email"
+                    required
+                    type="email"
+                    feedbackInvalid="Lütfen emailinizi giriniz"
+                    placeholder="Email"
+                    v-model="addedItem.data.email"
+                    autocomplete="off"
+                  />
                 </CInputGroup>
+
                 <CInputGroup class="mb-3">
                   <CInputGroupText>
-                    <CIcon icon="cil-lock-locked" />
+                    <CIcon icon="cil-cog" />
                   </CInputGroupText>
                   <CFormInput
-                    type="password"
-                    placeholder="Şifre"
-                    autocomplete="password"
+                    id="add-participant-companyname"
+                    required
+                    feedbackInvalid="Lütfen firmanızın adını giriniz"
+                    placeholder="Firmanızın adı"
+                    v-model="addedItem.data.companyName"
+                    autocomplete="off"
                   />
                 </CInputGroup>
-                <CInputGroup class="mb-1">
-                  <CInputGroupText>
-                    <CIcon icon="cil-lock-locked" />
-                  </CInputGroupText>
-                  <CFormInput
-                    type="password"
-                    placeholder="Şifre Tekrarı"
-                    autocomplete="password"
-                  />
-                </CInputGroup>
-                <CRow>
-                  <CCol class="text-left m-1">
-                    <CButton color="link" class="px-0 float-end">
-                      Şartlar & Koşullar
-                    </CButton>
-                  </CCol></CRow
-                >
-                <CRow>
-                  <CCol>
-                    <CListGroupItem>
-                      <CFormCheck
-                        label="* Uygulama Kullanım Koşullarını kabul ediyorum  ve Comitfy Şirketi Kişisel Veri Gizlilik Politikası ve Aydınlatma Metni kapsamında Healtie tarafından kişisel sağlık verilerimin;  hekim/uzman ile sohbet başlatmak ve/veya hekim/uzmana mesaj göndermek ve sağlık verilerimin Healtie tarafından saklanması amaçları ile sınırlı olarak işlenmesine ve yurtdışına aktarılmasına açık rıza veriyorum.
-"
-                        class="float-end mb-1 text-muted-small"
-                      />
-                    </CListGroupItem>
-                  </CCol>
-                </CRow>
 
                 <div class="d-grid">
-                  <CButton color="secondary">Kaydol</CButton>
+                  <CButton
+                    color="secondary"
+                    :type="isAbleToPushButton ? 'submit' : null"
+                    >Kaydol</CButton
+                  >
+                  <CButton
+                    color="dark"
+                    variant="outline"
+                    class="mt-3"
+                    @click="$router.push({ name: 'Login Admin' })"
+                  >
+                    Giriş sayfasına dön
+                  </CButton>
                 </div>
               </CForm>
             </CCardBody>
@@ -130,14 +113,68 @@
 </template>
 
 <script>
-import router from '@/router'
-
+import FairParticipantDTO from '@/models/fairParticipantDTO'
+import Toast from '@/models/create_TOAST_dto'
+import { mapActions } from 'vuex'
 export default {
   name: 'Register Doctor',
+  data() {
+    return {
+      addedItem: {
+        // Real data
+        data: FairParticipantDTO.createEmpty(),
+      },
+      validationChecked: false,
+      isAbleToPushButton: true,
+    }
+  },
   methods: {
-    async navigateTo(pageName) {
-      router.push({ name: pageName })
+    ...mapActions({
+      addParticipantToCurrentActiveFairAPI:
+        'fairParticipant/addParticipantToCurrentActiveFair',
+    }),
+    // eslint-disable-next-line no-unused-vars
+    submitToAPI({ event, newParticipantData }) {
+      this.isAbleToPushButton = false
+      this.validationChecked = true
+      const form = event.currentTarget
+      if (form.checkValidity() === false) {
+        event.preventDefault()
+        event.stopPropagation()
+        this.isAbleToPushButton = true
+        return
+      }
+      this.addNewParticipantToActiveFair({
+        participantData: newParticipantData,
+      })
+      this.queueEnableSendButton()
     },
+    async addNewParticipantToActiveFair({ participantData }) {
+      const response = await this.addParticipantToCurrentActiveFairAPI({
+        participantData: participantData,
+      })
+      if (response == true) {
+        new Toast(
+          'Added successfully',
+          'success',
+          true,
+          'text-white align-items-center',
+        )
+      } else {
+        new Toast(
+          'Something went wrong',
+          'danger',
+          true,
+          'text-white align-items-center',
+        )
+      }
+    },
+    async queueEnableSendButton() {
+      await this.$store.dispatch('invokeSendButtonDelay')
+      this.isAbleToPushButton = true
+    },
+    // ekle api
+    /* eslint-disable */
   },
 }
 </script>
