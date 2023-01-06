@@ -64,7 +64,12 @@ export default {
         store.state.isLoggedIn = true
       } else {
         store.state.isLoggedIn = false
-        router.push({ name: 'Login Admin' })
+        if (
+          !store.state.disabledLoginRoutePageNames.includes(
+            router.currentRoute.value.name,
+          )
+        )
+          router.push({ name: 'Login Admin' })
       }
     },
   },

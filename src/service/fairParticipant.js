@@ -131,6 +131,35 @@ export default {
         })
       return response
     },
+    async getParticipantPDF({ participantUUID }) {
+      var axios = require('axios')
+      var config = {
+        method: 'get',
+        url:
+          'fair-participant/generate-ticket/' +
+          '9adc7311-7658-43e8-89d8-2c75a01c1a08',
+        headers: {},
+        responseType: 'arraybuffer',
+      }
+
+      const response = await axios(config)
+        .then(function (response) {
+          const url = window.URL.createObjectURL(
+            new Blob([response.data], { type: 'application/pdf' }),
+          )
+          const link = document.createElement('a')
+          link.href = url
+          link.setAttribute('download', 'report.pdf')
+          document.body.appendChild(link)
+          link.click()
+          return true
+        })
+        .catch(function (error) {
+          console.log(error)
+          return false
+        })
+      return response
+    },
   },
   getters: {},
 }

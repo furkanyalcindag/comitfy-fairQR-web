@@ -14,6 +14,8 @@ export default createStore({
     sidebarUnfoldable: false,
     toasts: [],
     isLoggedIn: false,
+    // Disables the route to login when u put the page name here
+    disabledLoginRoutePageNames: ['Login Admin', 'Register Admin'],
   },
   mutations: {
     toggleSidebar(state) {

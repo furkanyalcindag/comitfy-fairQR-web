@@ -92,6 +92,19 @@
                   >
                     <CIcon icon="cil-trash" />
                   </CButton>
+                  <CButton
+                    color="primary"
+                    class="ms-2 text-white align-items-center"
+                    shape="rounded-pill"
+                    size="sm"
+                    v-c-tooltip="{
+                      content: 'PDF al',
+                      placement: 'top',
+                    }"
+                    @click="getParticipantPDF({ participantUUID: item.uuid })"
+                  >
+                    <CIcon icon="cil-address-book" />
+                  </CButton>
                 </CButtonGroup>
               </div>
             </template>
@@ -416,6 +429,7 @@ export default {
       addParticipantToFairAPI: 'fairParticipant/addParticipantToFair',
       deletePaticipantAPI: 'fairParticipant/deleteParticipant',
       updateParticipantAPI: 'fairParticipant/updateParticipant',
+      getParticipantPDFAPI: 'fairParticipant/getParticipantPDF',
     }),
     submitToAPI(event, modalname, data) {
       // Response
@@ -601,6 +615,27 @@ export default {
         )
         this.queueEnableSendButton()
       }
+    },
+    async getParticipantPDF({ participantUUID }) {
+      const response = await this.getParticipantPDFAPI({
+        participantUUID: participantUUID,
+      })
+      if (response == true) {
+        new Toast(
+          'Got PDF added successfully',
+          'success',
+          true,
+          'text-white align-items-center',
+        )
+      } else {
+        new Toast(
+          'Something went wrong',
+          'danger',
+          true,
+          'text-white align-items-center',
+        )
+      }
+      this.queueEnableSendButton()
     },
     // eslint-disable-next-line no-unused-vars
     async queueEnableSendButton() {
