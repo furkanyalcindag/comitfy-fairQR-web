@@ -34,13 +34,4 @@ app.component(LightEditor)
 app.component('v-select', vSelect)
 app.component('VueCtkDateTimePicker', VueCtkDateTimePicker)
 
-// CHECK IF USER LOGGED IN ALREADY
-/*if (store.getters['auth/checkIfLoggedIn']) {
-  // ROLE CHECK IS NEEDED HERE
-  // router.push({ name: 'Home' })
-} else {
-  // ROLE CHECK IS NEEDED HERE
-  router.push({ name: 'Login Admin' })
-}*/
-
 app.mount('#app')

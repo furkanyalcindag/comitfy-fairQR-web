@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // @ts-check
 import axios from 'axios'
 import router from '@/router'
@@ -7,13 +8,10 @@ axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL
 
 axios.interceptors.request.use(
   (request) => {
-    const isLoggedIn = store.getters['auth/checkIfLoggedIn']
-    if (isLoggedIn) {
+    store.dispatch('auth/checkIfLoggedIn')
+    if (store.state.isLoggedIn) {
       // request.headers.Authorization = 'Bearer ' + localStorage.getItem('token')
-    } else {
-      router.push({ name: 'Login Admin' })
     }
-
     return request
   },
   (err) => {

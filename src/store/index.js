@@ -13,6 +13,7 @@ export default createStore({
     sidebarVisible: '',
     sidebarUnfoldable: false,
     toasts: [],
+    isLoggedIn: false,
   },
   mutations: {
     toggleSidebar(state) {

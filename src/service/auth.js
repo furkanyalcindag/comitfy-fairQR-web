@@ -53,11 +53,15 @@ export default {
     async attemptRestore({ commit }) {
       commit('LOG_OUT')
     },
-  },
-
-  getters: {
     checkIfLoggedIn() {
-      return Boolean(localStorage.getItem('token'))
+      if (localStorage.getItem('token')) {
+        store.state.isLoggedIn = true
+      } else {
+        store.state.isLoggedIn = false
+        router.push({ name: 'Login Admin' })
+      }
     },
   },
+
+  getters: {},
 }

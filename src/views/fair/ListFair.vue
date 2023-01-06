@@ -20,7 +20,6 @@
           </CRow>
         </CCardHeader>
         <CCardBody class="p-0">
-          FUAR AKTIFLIGI EKLENEBILMELI VE GUNCELLENEBILMELI EDILEBILMELI
           <easy-data-table
             show-index
             v-model:itemsSelected="itemsSelected"
@@ -114,7 +113,6 @@
                   >
                     <CIcon icon="cil-list" />
                   </CButton>
-                  {{ item.uuid }}
                 </CButtonGroup>
               </div>
             </template>
