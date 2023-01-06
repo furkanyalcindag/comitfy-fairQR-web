@@ -407,10 +407,9 @@
 
 <script>
 import avatar from '@/assets/images/avatars/8.jpg'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import fairDTO from '@/models/fairDTO'
 import Toast from '@/models/create_TOAST_dto'
-import router from '@/router'
 // import router from '@/router'
 export default {
   name: 'Colors',
@@ -464,12 +463,6 @@ export default {
     },
   },
   created() {
-    // If not logged in
-    // Role check is needed here ------------IMPORTANT
-    let isLoggedIn = this.checkIfLoggedIn
-    if (isLoggedIn) {
-      router.push({ name: 'Login Admin' })
-    }
     this.getFairs(this.fairTable.serverOptions)
   },
   methods: {
@@ -478,9 +471,6 @@ export default {
       addFairAPI: 'fair/addFair',
       deleteFairAPI: 'fair/deleteFair',
       updateFairAPI: 'fair/updateFair',
-    }),
-    ...mapGetters({
-      checkIfLoggedInAPI: 'auth/checkIfLoggedIn',
     }),
     submitToAPI(event, modalname, data) {
       // Response
@@ -564,7 +554,6 @@ export default {
     // eslint-disable-next-line no-unused-vars
     async getFairs(pageOptions) {
       this.fairTable.loading = true
-      console.log(pageOptions)
       const response = await this.getAllFairsAPI(pageOptions)
       this.items = response ? response.data : []
       this.fairTable.serverItemsLength = response.totalElements

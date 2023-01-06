@@ -349,9 +349,8 @@
 
 <script>
 import avatar from '@/assets/images/avatars/8.jpg'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import fairClientDTO from '@/models/fairParticipantDTO'
-import router from '@/router'
 import fairDTO from '@/models/fairDTO'
 import Toast from '@/models/create_TOAST_dto'
 import FairParticipantDTO from '@/models/fairParticipantDTO'
@@ -410,12 +409,6 @@ export default {
     },
   },
   created() {
-    // If not logged in
-    // Role check is needed here ------------IMPORTANT
-    let isLoggedIn = this.checkIfLoggedIn
-    if (isLoggedIn) {
-      router.push({ name: 'Login Admin' })
-    }
     this.getFair({ uuid: this.uuid })
   },
   methods: {
@@ -425,9 +418,6 @@ export default {
       addParticipantToFairAPI: 'fairParticipant/addParticipantToFair',
       deletePaticipantAPI: 'fairParticipant/deleteParticipant',
       updateParticipantAPI: 'fairParticipant/updateParticipant',
-    }),
-    ...mapGetters({
-      checkIfLoggedInAPI: 'auth/checkIfLoggedIn',
     }),
     submitToAPI(event, modalname, data) {
       // Response

@@ -87,7 +87,7 @@
 
 <script>
 import router from '@/router'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Login Admin',
@@ -109,9 +109,9 @@ export default {
       signIn: 'auth/signIn',
     }),
 
-    ...mapGetters({
+    /*  ...mapGetters({
       checkIfLoggedIn: 'auth/checkIfLoggedIn',
-    }),
+    }), */
 
     async handleSubmit() {
       this.isAbleToLogin = await false
@@ -128,12 +128,12 @@ export default {
       router.push({ name: pageName })
     },
 
-    created() {
+    /* created() {
       if (this.checkIfLoggedIn) {
         // ROLE CHECK IS NEEDED HERE
         //router.push({ name: 'Home' })
       }
-    },
+    }, */
   },
 }
 </script>
