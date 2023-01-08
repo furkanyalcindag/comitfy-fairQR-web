@@ -131,14 +131,15 @@ export default {
         })
       return response
     },
-    async getParticipantPDF({ participantUUID }) {
+    async getParticipantPDF(state, { participantUUID = null }) {
+      console.log(participantUUID)
       var axios = require('axios')
       var config = {
         method: 'get',
         // The uuid must be participantUUID ------------IMPORTANT
         url:
           'fair-participant/generate-ticket/' +
-          '9adc7311-7658-43e8-89d8-2c75a01c1a08',
+          participantUUID,
         headers: {},
         responseType: 'arraybuffer',
       }

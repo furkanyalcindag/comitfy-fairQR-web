@@ -92,6 +92,7 @@
                   >
                     <CIcon icon="cil-trash" />
                   </CButton>
+                  {{ item.uuid }}
                   <CButton
                     color="primary"
                     class="ms-2 text-white align-items-center"
@@ -617,12 +618,13 @@ export default {
       }
     },
     async getParticipantPDF({ participantUUID }) {
+      console.log(participantUUID)
       const response = await this.getParticipantPDFAPI({
         participantUUID: participantUUID,
       })
       if (response == true) {
         new Toast(
-          'Got PDF added successfully',
+          'Downloading PDF',
           'success',
           true,
           'text-white align-items-center',
