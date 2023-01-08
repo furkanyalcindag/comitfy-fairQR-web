@@ -544,7 +544,7 @@ export default {
       })
       if (response == true) {
         new Toast(
-          'New role ' + participant.firstName + ' added successfully',
+          'New participant ' + participant.firstName + ' added successfully',
           'success',
           true,
           'text-white align-items-center',
@@ -570,7 +570,7 @@ export default {
       })
       if (response === true) {
         new Toast(
-          'ChatRoom updated successfully',
+          'Fair Participant updated successfully',
           'success',
           true,
           'text-white align-items-center',

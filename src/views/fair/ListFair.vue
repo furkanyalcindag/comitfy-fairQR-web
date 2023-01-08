@@ -559,7 +559,7 @@ export default {
       const response = await this.addFairAPI(fairData)
       if (response == true) {
         new Toast(
-          'New role ' + fairData.name + ' added successfully',
+          'New Fair ' + fairData.name + ' added successfully',
           'success',
           true,
           'text-white align-items-center',
@@ -580,7 +580,7 @@ export default {
       const response = await this.updateFairAPI(newFairData)
       if (response === true) {
         new Toast(
-          'Role updated successfully',
+          'Fair updated successfully',
           'success',
           true,
           'text-white align-items-center',
