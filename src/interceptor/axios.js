@@ -10,7 +10,7 @@ axios.interceptors.request.use(
   (request) => {
     store.dispatch('auth/checkIfLoggedIn')
     if (store.state.isLoggedIn) {
-      // request.headers.Authorization = 'Bearer ' + localStorage.getItem('token')
+      request.headers.Authorization = 'Bearer ' + localStorage.getItem('token')
     }
     return request
   },

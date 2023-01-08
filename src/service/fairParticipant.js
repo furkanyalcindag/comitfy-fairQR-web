@@ -114,7 +114,7 @@ export default {
       )
       var config = {
         method: 'post',
-        url: '/fair-participant/add-participant-by-fair',
+        url: 'fair-participant/add-participant-by-active-fair',
         headers: {
           'Content-Type': 'application/json',
         },

@@ -14,6 +14,7 @@ export default {
       if (localStorage.getItem('token')) {
         localStorage.removeItem('token')
       }
+      // ROLE CHECK IS NEEDED HERE --------IMPORTANT
       router.push({ name: 'Login Admin' })
     },
   },
@@ -24,7 +25,7 @@ export default {
 
       var config = {
         method: 'post',
-        url: process.env.VUE_APP_API_TEST_BASE_URL + 'auth/login',
+        url: process.env.VUE_APP_API_BASE_URL + 'auth/login',
         headers: {
           'Content-Type': 'application/json',
         },
