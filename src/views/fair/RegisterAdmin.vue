@@ -18,7 +18,6 @@
                 novalidate
                 :validated="validationChecked"
               >
-                LINK GIVES "Source must not be null" ERROR
                 <CRow class="text-center">
                   <h1>Kaydol</h1>
                   <p class="text-medium-emphasis">Yeni Bir Hesap Oluştur</p>

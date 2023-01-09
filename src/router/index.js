@@ -23,7 +23,8 @@ const routes = [
           {
             path: '/fair/client-list/:uuid',
             name: 'FairClientList',
-            component: () => import('@/views/fair/ListSpecificFairClients.vue'),
+            component: () =>
+              import('@/views/fairParticipant/ListSpecificFairClients.vue'),
             props: true,
           },
           {

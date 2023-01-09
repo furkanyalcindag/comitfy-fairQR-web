@@ -10,7 +10,8 @@
             <CCol xs="10" md="10" sm="10">
               {{ selectedFair.name }} | {{ selectedFair.place }} |
               {{ selectedFair.startDate }} - {{ selectedFair.endDate }} |
-              {{ selectedFair.active ? 'Aktif' : 'Aktif Değil' }}
+              <span v-if="selectedFair.active" class="text-success">Aktif</span>
+              <span v-else class="text-danger">Aktif Değil</span>
             </CCol>
             <CCol>
               <CButton
