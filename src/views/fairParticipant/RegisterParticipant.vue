@@ -160,13 +160,19 @@ export default {
       const response = await this.addParticipantToCurrentActiveFairAPI({
         participantData: participantData,
       })
-      if (response == true) {
+      if (response) {
         new Toast(
-          'Added successfully',
+          'Registered ' + participantData.firstName + ' successfully',
           'success',
           true,
           'text-white align-items-center',
         )
+        this.$store.dispatch('downloadPDF', {
+          data: response,
+          pdfName: participantData.email,
+        })
+        this.addedItem.data = FairParticipantDTO.createEmpty()
+        this.validationChecked = false
       } else {
         new Toast(
           'Something went wrong',

@@ -1,4 +1,5 @@
 import FairParticipantDTO from '@/models/fairParticipantDTO'
+import store from '@/store/index'
 export default {
   namespaced: true,
   state: {},
@@ -119,40 +120,33 @@ export default {
           'Content-Type': 'application/json',
         },
         data: data,
+        responseType: 'arraybuffer',
       }
+      // It returns the pdf
       const response = await axios(config)
         .then(function (response) {
-          console.log(JSON.stringify(response.data.firstName))
-          return true
+          return response.data
         })
         .catch(function (error) {
           console.log(error)
-          return false
+          return null
         })
       return response
     },
-    async getParticipantPDF(state, { participantUUID = null }) {
+    async getParticipantPDF(state, { participant = null }) {
       var axios = require('axios')
       var config = {
         method: 'get',
-        // The uuid must be participantUUID ------------IMPORTANT
-        url:
-          'fair-participant/generate-ticket/' +
-          participantUUID,
+        // The uuid must be participant ------------IMPORTANT
+        url: 'fair-participant/generate-ticket/' + participant.uuid,
         headers: {},
         responseType: 'arraybuffer',
       }
 
       const response = await axios(config)
         .then(function (response) {
-          const url = window.URL.createObjectURL(
-            new Blob([response.data], { type: 'application/pdf' }),
-          )
-          const link = document.createElement('a')
-          link.href = url
-          link.setAttribute('download', 'report.pdf')
-          document.body.appendChild(link)
-          link.click()
+          console.log(response.data)
+          store.dispatch('downloadPDF', { data: response.data, pdfName: participant.email })
           return true
         })
         .catch(function (error) {

@@ -39,6 +39,16 @@ export default createStore({
     invokeSendButtonDelay() {
       return new Promise((resolve) => setTimeout(resolve, 2000)) // wait 2 sec
     },
+    downloadPDF(state, { data = null, pdfName = null }) {
+      const url = window.URL.createObjectURL(
+        new Blob([data], { type: 'application/pdf' }),
+      )
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', pdfName ? pdfName + '.pdf' : 'report.pdf')
+      document.body.appendChild(link)
+      link.click()
+    },
   },
   modules: {
     auth,

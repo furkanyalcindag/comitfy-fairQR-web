@@ -102,7 +102,7 @@
                       content: 'PDF al',
                       placement: 'top',
                     }"
-                    @click="getParticipantPDF({ participantUUID: item.uuid })"
+                    @click="getParticipantPDF({ participant: item })"
                   >
                     <CIcon icon="cil-address-book" />
                   </CButton>
@@ -183,6 +183,7 @@
             <CFormInput
               id="add-fair-client-email"
               required
+              type="email"
               feedbackInvalid="Lütfen bir email giriniz"
               v-model="addedItem.data.email"
               autocomplete="off"
@@ -324,6 +325,7 @@
             <CFormInput
               id="edit-fair-client-email"
               required
+              type="email"
               feedbackInvalid="Lütfen bir email giriniz"
               v-model="editedItem.data.email"
               autocomplete="off"
@@ -616,9 +618,9 @@ export default {
         this.queueEnableSendButton()
       }
     },
-    async getParticipantPDF({ participantUUID }) {
+    async getParticipantPDF({ participant }) {
       const response = await this.getParticipantPDFAPI({
-        participantUUID: participantUUID,
+        participant: participant,
       })
       if (response == true) {
         new Toast(
