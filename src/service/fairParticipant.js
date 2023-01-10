@@ -132,7 +132,6 @@ export default {
       return response
     },
     async getParticipantPDF(state, { participantUUID = null }) {
-      console.log(participantUUID)
       var axios = require('axios')
       var config = {
         method: 'get',

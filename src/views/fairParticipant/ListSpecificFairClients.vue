@@ -46,7 +46,7 @@
             :rows-items="fairParticipantsTable.rowsItem"
           >
             <template #item-name="{ firstName, lastName }">
-              <div>{{ firstName }} {{ lastName }}</div>
+              <div>{{ firstName }} | {{ lastName }}</div>
             </template>
 
             <template #item-companyName="{ companyName }">
@@ -93,7 +93,6 @@
                   >
                     <CIcon icon="cil-trash" />
                   </CButton>
-                  {{ item.uuid }}
                   <CButton
                     color="primary"
                     class="ms-2 text-white align-items-center"
@@ -370,7 +369,7 @@ import Toast from '@/models/create_TOAST_dto'
 import FairParticipantDTO from '@/models/fairParticipantDTO'
 
 export default {
-  name: 'Colors',
+  name: 'Fair Clients List',
   components: {
     EasyDataTable: window['vue3-easy-data-table'],
   },
@@ -529,7 +528,6 @@ export default {
     },
     async getFairParticipants({ pageOptions, fairUUID }) {
       this.fairParticipantsTable.loading = true
-      console.log(pageOptions, fairUUID)
       const response = await this.getParticipantsByFairAPI({
         page: pageOptions,
         fairUUID: fairUUID,
@@ -619,7 +617,6 @@ export default {
       }
     },
     async getParticipantPDF({ participantUUID }) {
-      console.log(participantUUID)
       const response = await this.getParticipantPDFAPI({
         participantUUID: participantUUID,
       })

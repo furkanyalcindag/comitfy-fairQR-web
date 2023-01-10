@@ -10,7 +10,14 @@
       <CHeaderNav class="d-none d-md-flex me-auto">
         <CNavItem>
           <router-link :to="{ name: 'FairList' }" :class="'nav-link'"
-            >FairList</router-link
+            >Fair List</router-link
+          >
+        </CNavItem>
+        <CNavItem>
+          <router-link
+            :to="{ name: 'Register Participant Admin' }"
+            :class="'nav-link'"
+            >Register Participant To Newest</router-link
           >
         </CNavItem>
         <!-- <CNavItem>

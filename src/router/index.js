@@ -35,9 +35,9 @@ const routes = [
         ],
       },
     ],
-    // Full size pages(Without navbar or other things. Just page itself)
   },
-  // decide deleteion --------------IMPORTANT
+  // Full size pages(Without navbar or other things. Just page itself)
+  // decide deletion --------------IMPORTANT
   {
     path: '/pages',
     name: 'Pages',
@@ -86,9 +86,10 @@ const routes = [
         component: () => import('@/views/fair/LoginAdmin.vue'),
       },
       {
-        path: '/admin/register-admin',
-        name: 'Register Admin',
-        component: () => import('@/views/fair/RegisterAdmin.vue'),
+        path: '/admin/register-participant',
+        name: 'Register Participant Admin',
+        component: () =>
+          import('@/views/fairParticipant/RegisterParticipant.vue'),
       },
       /* {
             path: 'login-doctor',
@@ -102,6 +103,25 @@ const routes = [
           }, */
     ],
   },
+  {
+    path: '/participant',
+    name: 'Register Participant',
+    redirect: '/participant/register',
+    component: {
+      render() {
+        return h(resolveComponent('router-view'))
+      },
+    },
+    children: [
+      {
+        path: '/participant/register',
+        name: 'Register Participant',
+        component: () =>
+          import('@/views/fairParticipant/RegisterParticipant.vue'),
+      },
+    ],
+  },
+
   {
     path: '/:catchAll(.*)',
     name: 'Notfound',

@@ -1,10 +1,5 @@
 import { createStore } from 'vuex'
 import auth from '@/service/auth'
-import role from '@/service/role'
-
-import user from '@/service/user'
-
-import settings from '@/service/Settings'
 import fair from '@/service/fair'
 import fairParticipant from '@/service/fairParticipant'
 
@@ -47,9 +42,6 @@ export default createStore({
   },
   modules: {
     auth,
-    role,
-    user,
-    settings,
     fair,
     fairParticipant,
   },

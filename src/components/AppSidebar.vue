@@ -17,7 +17,10 @@
         :icon="logoNegative"
         :height="35"
       /> -->
-      <h2 style="color: #5085a5">Comitfy</h2>
+      <img
+        class="w-75"
+        src="https://www.comitfy.com/wp-content/uploads/2022/01/imageonline-co-whitebackgroundremoved-1-e1641159740659.png"
+      />
       <CIcon
         custom-class-name="sidebar-brand-narrow"
         :icon="sygnet"

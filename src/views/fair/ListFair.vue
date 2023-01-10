@@ -409,7 +409,7 @@ import fairDTO from '@/models/fairDTO'
 import Toast from '@/models/create_TOAST_dto'
 // import router from '@/router'
 export default {
-  name: 'Colors',
+  name: 'Fair List',
   components: {
     EasyDataTable: window['vue3-easy-data-table'],
   },

@@ -19,8 +19,10 @@
                 :validated="validationChecked"
               >
                 <CRow class="text-center">
-                  <h1>Kaydol</h1>
-                  <p class="text-medium-emphasis">Yeni Bir Hesap Oluştur</p>
+                  <h1>{{ isAdmin ? 'Kaydet' : 'Kaydol' }}</h1>
+                  <p class="text-medium-emphasis">
+                    Aktif Fuara Yeni Bir Kayıt Oluştur
+                  </p>
                 </CRow>
                 <CInputGroup class="mb-3">
                   <CInputGroupText>
@@ -92,15 +94,16 @@
                   <CButton
                     color="secondary"
                     :type="isAbleToPushButton ? 'submit' : null"
-                    >Kaydol</CButton
+                    >{{ isAdmin ? 'Kaydet' : 'Kaydol' }}</CButton
                   >
                   <CButton
                     color="dark"
                     variant="outline"
                     class="mt-3"
-                    @click="$router.push({ name: 'Login Admin' })"
+                    @click="$router.go(-1)"
+                    v-if="isAdmin"
                   >
-                    Giriş sayfasına dön
+                    Geri dön
                   </CButton>
                 </div>
               </CForm>
@@ -117,7 +120,7 @@ import FairParticipantDTO from '@/models/fairParticipantDTO'
 import Toast from '@/models/create_TOAST_dto'
 import { mapActions } from 'vuex'
 export default {
-  name: 'Register Doctor',
+  name: 'Register Participant',
   data() {
     return {
       addedItem: {
@@ -126,7 +129,11 @@ export default {
       },
       validationChecked: false,
       isAbleToPushButton: true,
+      isAdmin: false,
     }
+  },
+  created() {
+    this.isAdmin = this.$route.name == 'Register Participant Admin'
   },
   methods: {
     ...mapActions({

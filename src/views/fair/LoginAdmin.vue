@@ -2,7 +2,7 @@
   <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
     <CContainer>
       <CRow class="justify-content-center">
-        <CCol :md="8">
+        <CCol :md="9" :lg="6">
           <CCardGroup>
             <CCard class="p-4">
               <CCardBody>
@@ -49,22 +49,6 @@
                 </CForm>
               </CCardBody>
             </CCard>
-            <CCard class="text-white bg-secondary py-5">
-              <CCardBody class="text-center">
-                <div>
-                  <h2>Kaydol</h2>
-                  <p>Bir hesabınız yok mu?</p>
-                  <CButton
-                    color="light"
-                    variant="outline"
-                    class="mt-3"
-                    @click="navigateTo('Register Admin')"
-                  >
-                    Şimdi Hesap Aç
-                  </CButton>
-                </div>
-              </CCardBody>
-            </CCard>
           </CCardGroup>
         </CCol>
       </CRow>
@@ -73,7 +57,6 @@
 </template>
 
 <script>
-import router from '@/router'
 import { mapActions } from 'vuex'
 
 export default {
@@ -109,10 +92,6 @@ export default {
         this.failedToLoginText = 'Kullanıcı adınız veya şifre yanlış.'
         this.isFailedToLogin = true
       }
-    },
-
-    async navigateTo(pageName) {
-      router.push({ name: pageName })
     },
 
     /* created() {
