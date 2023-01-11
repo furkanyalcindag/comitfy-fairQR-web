@@ -10,14 +10,14 @@
       <CHeaderNav class="d-none d-md-flex me-auto">
         <CNavItem>
           <router-link :to="{ name: 'FairList' }" :class="'nav-link'"
-            >Fair List</router-link
+            >Fuar Listesi</router-link
           >
         </CNavItem>
         <CNavItem>
           <router-link
             :to="{ name: 'Register Participant Admin' }"
             :class="'nav-link'"
-            >Register Participant To Newest</router-link
+            >Güncel Fuara katılımcı ekle</router-link
           >
         </CNavItem>
         <!-- <CNavItem>

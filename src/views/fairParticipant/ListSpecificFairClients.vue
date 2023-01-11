@@ -44,6 +44,7 @@
             buttons-pagination
             :loading="fairParticipantsTable.loading"
             :rows-items="fairParticipantsTable.rowsItem"
+            rows-per-page-message="sayfa"
           >
             <template #item-name="{ firstName, lastName }">
               <div>{{ firstName }} | {{ lastName }}</div>
@@ -99,7 +100,7 @@
                     shape="rounded-pill"
                     size="sm"
                     v-c-tooltip="{
-                      content: 'PDF al',
+                      content: 'PDF',
                       placement: 'top',
                     }"
                     @click="getParticipantPDF({ participant: item })"
@@ -545,7 +546,7 @@ export default {
       })
       if (response == true) {
         new Toast(
-          'New participant ' + participant.firstName + ' added successfully',
+          'Yeni Katılımcı ' + participant.firstName + ' ekleme Başarılı!',
           'success',
           true,
           'text-white align-items-center',
@@ -557,7 +558,7 @@ export default {
         })
       } else {
         new Toast(
-          'Something went wrong',
+          'Bir şeyler ters gitti',
           'danger',
           true,
           'text-white align-items-center',
@@ -571,7 +572,7 @@ export default {
       })
       if (response === true) {
         new Toast(
-          'Fair Participant updated successfully',
+          'Fuar Katılımcısı Başarıyla Güncellendi',
           'success',
           true,
           'text-white align-items-center',
@@ -583,7 +584,7 @@ export default {
         this.closeModal('updateParticipantModal')
       } else {
         new Toast(
-          'Something went wrong',
+          'Bir şeyler ters gitti!',
           'danger',
           true,
           'text-white align-items-center',
@@ -598,7 +599,7 @@ export default {
       })
       if (response === true) {
         new Toast(
-          'Deleted successfully',
+          'Silme işlemi Başarılı',
           'success',
           true,
           'text-white align-items-center',
@@ -610,7 +611,7 @@ export default {
         this.closeModal('deleteParticipantModal', true)
       } else {
         new Toast(
-          'Something went wrong',
+          'Bir şeyler ters gitti!',
           'danger',
           true,
           'text-white -align-items-center',
@@ -624,14 +625,14 @@ export default {
       })
       if (response == true) {
         new Toast(
-          'Downloading PDF',
+          'PDF indiriliyor...',
           'success',
           true,
           'text-white align-items-center',
         )
       } else {
         new Toast(
-          'Something went wrong',
+          'Bir şeyler ters gitti!',
           'danger',
           true,
           'text-white align-items-center',

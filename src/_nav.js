@@ -1,16 +1,16 @@
 export default [
   {
     component: 'CNavTitle',
-    name: 'Management',
+    name: 'Yonetim',
   },
   {
     component: 'CNavItem',
-    name: 'Fair List',
+    name: 'Fuar  Listesi',
     to: '/fair/list',
   },
   {
     component: 'CNavItem',
-    name: 'Register Participant To Newest',
+    name: 'Güncel Fuara katılımcı ekle',
     to: '/admin/register-participant',
   },
 ]

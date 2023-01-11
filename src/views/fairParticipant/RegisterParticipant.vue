@@ -162,7 +162,7 @@ export default {
       })
       if (response) {
         new Toast(
-          'Registered ' + participantData.firstName + ' successfully',
+          'Kayıt ' + participantData.firstName + ' Başarılı',
           'success',
           true,
           'text-white align-items-center',
@@ -175,7 +175,7 @@ export default {
         this.validationChecked = false
       } else {
         new Toast(
-          'Something went wrong',
+          'Bir şeyler ters gitti!',
           'danger',
           true,
           'text-white align-items-center',

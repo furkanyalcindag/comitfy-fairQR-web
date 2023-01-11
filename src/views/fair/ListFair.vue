@@ -31,6 +31,7 @@
             buttons-pagination
             :loading="fairTable.loading"
             :rows-items="fairTable.rowsItem"
+            rows-per-page-message="sayfa"
           >
             <template #item-name="{ name }">
               <div class="position-relative d-inline-block">
@@ -101,7 +102,7 @@
                     shape="rounded-pill"
                     size="sm"
                     v-c-tooltip="{
-                      content: 'Müşterileri',
+                      content: 'Katılımcıları',
                       placement: 'top',
                     }"
                     @click="
@@ -420,7 +421,7 @@ export default {
         { text: 'Yeri', value: 'place' },
         { text: 'Başlangıç Tarihi', value: 'startDate' },
         { text: 'Bitiş Tarihi', value: 'endDate' },
-        { text: 'Aktiv', value: 'active' },
+        { text: 'Aktif', value: 'active' },
         { text: 'İşlemler', value: 'operations' },
       ],
       items: [],
@@ -559,7 +560,7 @@ export default {
       const response = await this.addFairAPI(fairData)
       if (response == true) {
         new Toast(
-          'New Fair ' + fairData.name + ' added successfully',
+          'Yeni Fuar ' + '"' + fairData.name + '"' + ' Başarıyla Eklendi',
           'success',
           true,
           'text-white align-items-center',
@@ -568,7 +569,7 @@ export default {
         this.getFairs(this.fairTable.serverOptions)
       } else {
         new Toast(
-          'Something went wrong',
+          'Bir şeyler ters gitti!',
           'danger',
           true,
           'text-white align-items-center',
@@ -580,7 +581,7 @@ export default {
       const response = await this.updateFairAPI(newFairData)
       if (response === true) {
         new Toast(
-          'Fair updated successfully',
+          'Fuar Başarıyla Güncellendi',
           'success',
           true,
           'text-white align-items-center',
@@ -589,7 +590,7 @@ export default {
         this.closeModal('updateFairModal', true)
       } else {
         new Toast(
-          'Something went wrong',
+          'Bir şeyler ters gitti!',
           'danger',
           true,
           'text-white align-items-center',
@@ -602,7 +603,7 @@ export default {
       const response = await this.deleteFairAPI(uuid)
       if (response === true) {
         new Toast(
-          'Succesfully deleted',
+          'Silme işlemi Başarlı',
           'success',
           true,
           'text-white align-items-center',
@@ -611,7 +612,7 @@ export default {
         this.closeModal('deleteFairModal', true)
       } else {
         new Toast(
-          'Something went wrong',
+          'Bir şeyler ters gitti!',
           'danger',
           true,
           'text-white align-items-center',
@@ -632,7 +633,7 @@ export default {
         ) {
           this.addedItem.data.endDate = null
           new Toast(
-            'Cant select EndTime lesser than StartTime',
+            'Bitiş Zamanı Başlangıç ​​Zamanından daha az seçilemez',
             'danger',
             true,
             'text-white -align-items-center',
@@ -652,7 +653,7 @@ export default {
         ) {
           this.editedItem.data.endDate = null
           new Toast(
-            'Cant select EndTime lesser than StartTime',
+            'Bitiş Zamanı Başlangıç ​​Zamanından daha az seçilemez',
             'danger',
             true,
             'text-white -align-items-center',
