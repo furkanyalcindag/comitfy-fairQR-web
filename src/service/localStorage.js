@@ -7,8 +7,6 @@ let target = undefined
 
 const getItem = window.localStorage.getItem
 localStorage.getItem = (key) => {
-  console.info('Getting', key)
-
   // Collect dependent Vue instance
   if (!storeItemSubscribers[key]) storeItemSubscribers[key] = []
   if (target) storeItemSubscribers[key].push(target)

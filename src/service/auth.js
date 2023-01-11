@@ -69,8 +69,9 @@ export default {
           !store.state.disabledLoginRoutePageNames.includes(
             router.currentRoute.value.name,
           )
-        )
+        ) {
           router.push({ name: 'Login Admin' })
+        }
       }
     },
   },

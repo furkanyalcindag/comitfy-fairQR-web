@@ -1,3 +1,4 @@
+/* eslint-disable */
 import FairParticipantDTO from '@/models/fairParticipantDTO'
 import store from '@/store/index'
 export default {
@@ -34,7 +35,6 @@ export default {
         })
       return response
     },
-    /* eslint-disable */
     async addParticipantToFair(state, { participant = null, fairUUID = null }) {
       // ROLE CHECK IS NEEDED HERE DUE BY SECURITY --------------IMPORTANT
       var axios = require('axios')
@@ -51,7 +51,6 @@ export default {
       }
       const response = await axios(config)
         .then(function (response) {
-          console.log(JSON.stringify(response.data.name))
           return true
         })
         .catch(function (error) {
@@ -72,7 +71,6 @@ export default {
       }
       const response = await axios(config)
         .then(function (response) {
-          console.log(JSON.stringify(response.data))
           return true
         })
         .catch(function (error) {
@@ -98,7 +96,6 @@ export default {
       }
       const response = axios(config)
         .then(function (response) {
-          console.log(JSON.stringify(response.data))
           return true
         })
         .catch(function (error) {
@@ -145,8 +142,10 @@ export default {
 
       const response = await axios(config)
         .then(function (response) {
-          console.log(response.data)
-          store.dispatch('downloadPDF', { data: response.data, pdfName: participant.email })
+          store.dispatch('downloadPDF', {
+            data: response.data,
+            pdfName: participant.email,
+          })
           return true
         })
         .catch(function (error) {

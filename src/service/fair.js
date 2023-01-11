@@ -47,8 +47,8 @@ export default {
         data: data,
       }
       const response = await axios(config)
+        // eslint-disable-next-line no-unused-vars
         .then(function (response) {
-          console.log(JSON.stringify(response.data.name))
           return true
         })
         .catch(function (error) {
@@ -71,8 +71,8 @@ export default {
         data: data,
       }
       const response = axios(config)
+        // eslint-disable-next-line no-unused-vars
         .then(function (response) {
-          console.log(JSON.stringify(response.data))
           return true
         })
         .catch(function (error) {
@@ -92,8 +92,8 @@ export default {
         },
       }
       const response = await axios(config)
+        // eslint-disable-next-line no-unused-vars
         .then(function (response) {
-          console.log(JSON.stringify(response.data))
           return true
         })
         .catch(function (error) {
