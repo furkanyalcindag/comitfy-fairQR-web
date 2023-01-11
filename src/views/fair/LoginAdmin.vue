@@ -64,8 +64,8 @@ export default {
   data() {
     return {
       data: {
-        email: 'yunus@gmail.com',
-        password: 123456,
+        email: '',
+        password: '',
       },
       isRememberUseActive: false,
       isFailedToLogin: false,
