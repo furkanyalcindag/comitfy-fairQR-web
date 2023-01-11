@@ -60,7 +60,6 @@ export default {
       // ROLE CHECK IS NEEDED HERE DUE BY SECURITY --------IMPORTANT
       var axios = require('axios')
       var data = fairDTO.createFromJson(JSON.parse(JSON.stringify(fairData)))
-      console.log(data)
       var config = {
         method: 'put',
         url: 'fair/' + fairData.uuid,
