@@ -17,8 +17,6 @@ localStorage.getItem = (key) => {
 
 const setItem = window.localStorage.setItem
 localStorage.setItem = (key, value) => {
-  console.info('Setting', key, value)
-
   // Update the value in the dependent Vue instances
   if (storeItemSubscribers[key]) {
     storeItemSubscribers[key].forEach((dep) => {

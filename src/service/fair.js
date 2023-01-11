@@ -37,7 +37,6 @@ export default {
       // ROLE CHECK IS NEEDED HERE DUE BY SECURITY --------------IMPORTANT
       var axios = require('axios')
       var data = JSON.stringify(fairData)
-      console.log(data)
       var config = {
         method: 'post',
         url: 'fair/',

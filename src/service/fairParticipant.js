@@ -85,7 +85,6 @@ export default {
       var data = FairParticipantDTO.createFromJson(
         JSON.parse(JSON.stringify(participantData)),
       )
-      console.log(data)
       var config = {
         method: 'put',
         url: 'fair-participant/' + data.uuid,
