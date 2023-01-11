@@ -122,6 +122,45 @@ export default {
         })
       return response
     },
+    // eslint-disable-next-line no-unused-vars
+    async getNewestActiveFair(state) {
+      // CHECK IF USER LOGGED IN ALREADY
+
+      var data = JSON.parse(
+        JSON.stringify({
+          filters: [
+            {
+              key: 'isActive',
+              operation: ':',
+              value: true,
+            },
+          ],
+          pageNumber: 0,
+          pageSize: 1,
+        }),
+      )
+      console.log(data)
+
+      // ROLE CHECK IS NEEDED HERE DUE BY SECURITY -----------IMPORTANT
+      var axios = require('axios')
+      var config = {
+        method: 'post',
+        url: 'fair/get-all-by-filter',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      }
+      const response = await axios(config)
+        .then(function (response) {
+          return response.data
+        })
+        .catch(function (error) {
+          console.log(error)
+          return null
+        })
+      return response
+    },
   },
   getters: {},
 }

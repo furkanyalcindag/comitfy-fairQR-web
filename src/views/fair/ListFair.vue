@@ -603,7 +603,7 @@ export default {
       const response = await this.deleteFairAPI(uuid)
       if (response === true) {
         new Toast(
-          'Silme işlemi Başarlı',
+          'Silme işlemi Başarılı',
           'success',
           true,
           'text-white align-items-center',
