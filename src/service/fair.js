@@ -153,7 +153,9 @@ export default {
       }
       const response = await axios(config)
         .then(function (response) {
-          return response.data
+          return fairDTO.createFromJson(
+            JSON.parse(JSON.stringify(response.data.data[0])),
+          )
         })
         .catch(function (error) {
           console.log(error)

@@ -167,9 +167,14 @@ export default {
           true,
           'text-white align-items-center',
         )
+        // eslint-disable-next-line no-unused-vars
+        const newestFairResponse = await this.$store.dispatch(
+          'fair/getNewestActiveFair',
+        )
         this.$store.dispatch('downloadPDF', {
           data: response,
-          pdfName: participantData.email,
+          pdfName:
+            newestFairResponse.name + '_' + participantData.email + '_bilet',
         })
         this.addedItem.data = FairParticipantDTO.createEmpty()
         this.validationChecked = false
