@@ -14,6 +14,8 @@ export default {
       if (localStorage.getItem('token')) {
         localStorage.removeItem('token')
       }
+      // ROLE CHECK IS NEEDED HERE --------IMPORTANT
+      router.push({ name: 'Login Admin' })
     },
   },
   actions: {
@@ -23,7 +25,7 @@ export default {
 
       var config = {
         method: 'post',
-        url: 'auth/login',
+        url: process.env.VUE_APP_API_BASE_URL + 'auth/login',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -46,6 +48,10 @@ export default {
       return response
     },
 
+    async attemptLogOut() {
+      store.dispatch('auth/attemptRestore')
+    },
+
     async attempt({ commit }, data) {
       commit('LOG_IN', data)
     },
@@ -53,11 +59,22 @@ export default {
     async attemptRestore({ commit }) {
       commit('LOG_OUT')
     },
-  },
 
-  getters: {
     checkIfLoggedIn() {
-      return Boolean(localStorage.getItem('token'))
+      if (localStorage.getItem('token')) {
+        store.state.isLoggedIn = true
+      } else {
+        store.state.isLoggedIn = false
+        if (
+          !store.state.disabledLoginRoutePageNames.includes(
+            router.currentRoute.value.name,
+          )
+        ) {
+          router.push({ name: 'Login Admin' })
+        }
+      }
     },
   },
+
+  getters: {},
 }

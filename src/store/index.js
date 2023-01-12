@@ -1,28 +1,20 @@
 import { createStore } from 'vuex'
 import auth from '@/service/auth'
-import role from '@/service/role'
-import category from '@/service/category'
-import language from '@/service/language'
-import comment from '@/service/comment'
-import contract from '@/service/contract'
-
-import article from '@/service/article'
-import user from '@/service/user'
-
-import doctor from '@/service/Doctor'
-import academicInfo from '@/service/AcademicInfo'
-import certificate from '@/service/Certificate'
-import experience from '@/service/Experience'
-import settings from '@/service/Settings'
-import notification from '@/service/Notification'
-import tag from '@/service/Tag'
-import chatRoom from '@/service/ChatRoom'
+import fair from '@/service/fair'
+import fairParticipant from '@/service/fairParticipant'
 
 export default createStore({
   state: {
     sidebarVisible: '',
     sidebarUnfoldable: false,
     toasts: [],
+    isLoggedIn: false,
+    // Disables the route to login when u put the page name here when checking the token
+    disabledLoginRoutePageNames: [
+      'Login Admin',
+      'Register Participant Admin',
+      'Register Participant',
+    ],
   },
   mutations: {
     toggleSidebar(state) {
@@ -51,23 +43,20 @@ export default createStore({
     invokeSendButtonDelay() {
       return new Promise((resolve) => setTimeout(resolve, 2000)) // wait 2 sec
     },
+    downloadPDF(state, { data = null, pdfName = null }) {
+      const url = window.URL.createObjectURL(
+        new Blob([data], { type: 'application/pdf' }),
+      )
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', pdfName ? pdfName + '.pdf' : 'report.pdf')
+      document.body.appendChild(link)
+      link.click()
+    },
   },
   modules: {
     auth,
-    role,
-    category,
-    language,
-    article,
-    user,
-    comment,
-    contract,
-    doctor,
-    academicInfo,
-    certificate,
-    experience,
-    settings,
-    notification,
-    tag,
-    chatRoom,
+    fair,
+    fairParticipant,
   },
 })

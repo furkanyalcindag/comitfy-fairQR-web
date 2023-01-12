@@ -12,10 +12,14 @@
     "
   >
     <CSidebarBrand>
-      <CIcon
+      <!-- <CIcon
         custom-class-name="sidebar-brand-full"
         :icon="logoNegative"
         :height="35"
+      /> -->
+      <img
+        style="max-width: 80%"
+        src="https://www.comitfy.com/wp-content/uploads/2022/01/imageonline-co-whitebackgroundremoved-1-e1641159740659.png"
       />
       <CIcon
         custom-class-name="sidebar-brand-narrow"

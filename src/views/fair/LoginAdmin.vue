@@ -2,7 +2,7 @@
   <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
     <CContainer>
       <CRow class="justify-content-center">
-        <CCol :md="8">
+        <CCol :md="9" :lg="6">
           <CCardGroup>
             <CCard class="p-4">
               <CCardBody>
@@ -34,14 +34,6 @@
                   <span v-if="isFailedToLogin" class="text-danger">{{
                     failedToLoginText
                   }}</span>
-                  <CRow>
-                    <CListGroupItem>
-                      <CFormCheck
-                        label="Beni Hatırla"
-                        class="float-end"
-                        v-model="isRememberUseActive"
-                      /> </CListGroupItem
-                  ></CRow>
 
                   <CRow>
                     <CCol :xs="6">
@@ -53,29 +45,8 @@
                         Giriş
                       </CButton>
                     </CCol>
-                    <CCol :xs="6" class="text-right">
-                      <CButton color="link" class="px-0">
-                        Şifrenizi mi unuttunuz?
-                      </CButton>
-                    </CCol>
                   </CRow>
                 </CForm>
-              </CCardBody>
-            </CCard>
-            <CCard class="text-white bg-secondary py-5" style="width: 44%">
-              <CCardBody class="text-center">
-                <div>
-                  <h2>Kaydol</h2>
-                  <p>Bir hesabınız yok mu?</p>
-                  <CButton
-                    color="light"
-                    variant="outline"
-                    class="mt-3"
-                    @click="navigateTo('Register Admin')"
-                  >
-                    Şimdi Hesap Aç
-                  </CButton>
-                </div>
               </CCardBody>
             </CCard>
           </CCardGroup>
@@ -86,16 +57,15 @@
 </template>
 
 <script>
-import router from '@/router'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Login Admin',
   data() {
     return {
       data: {
-        email: 'yunus@gmail.com',
-        password: 123456,
+        email: '',
+        password: '',
       },
       isRememberUseActive: false,
       isFailedToLogin: false,
@@ -109,9 +79,9 @@ export default {
       signIn: 'auth/signIn',
     }),
 
-    ...mapGetters({
+    /*  ...mapGetters({
       checkIfLoggedIn: 'auth/checkIfLoggedIn',
-    }),
+    }), */
 
     async handleSubmit() {
       this.isAbleToLogin = await false
@@ -124,16 +94,12 @@ export default {
       }
     },
 
-    async navigateTo(pageName) {
-      router.push({ name: pageName })
-    },
-
-    created() {
+    /* created() {
       if (this.checkIfLoggedIn) {
         // ROLE CHECK IS NEEDED HERE
         //router.push({ name: 'Home' })
       }
-    },
+    }, */
   },
 }
 </script>

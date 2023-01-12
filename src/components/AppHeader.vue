@@ -9,17 +9,26 @@
       </CHeaderBrand>
       <CHeaderNav class="d-none d-md-flex me-auto">
         <CNavItem>
-          <CNavLink href="/dashboard"> Dashboard </CNavLink>
+          <router-link :to="{ name: 'FairList' }" :class="'nav-link'"
+            >Fuar Listesi</router-link
+          >
         </CNavItem>
         <CNavItem>
+          <router-link
+            :to="{ name: 'Register Participant Admin' }"
+            :class="'nav-link'"
+            >Güncel Fuara katılımcı ekle</router-link
+          >
+        </CNavItem>
+        <!-- <CNavItem>
           <CNavLink href="#">Users</CNavLink>
         </CNavItem>
         <CNavItem>
           <CNavLink href="#">Settings</CNavLink>
-        </CNavItem>
+        </CNavItem> -->
       </CHeaderNav>
       <CHeaderNav>
-        <CNavItem>
+        <!-- <CNavItem>
           <CNavLink href="#">
             <CIcon class="mx-2" icon="cil-bell" size="lg" />
           </CNavLink>
@@ -33,25 +42,25 @@
           <CNavLink href="#">
             <CIcon class="mx-2" icon="cil-envelope-open" size="lg" />
           </CNavLink>
-        </CNavItem>
+        </CNavItem> -->
         <AppHeaderDropdownAccnt />
       </CHeaderNav>
     </CContainer>
-    <CHeaderDivider />
-    <CContainer fluid>
+    <!-- <CHeaderDivider /> -->
+    <!-- <CContainer fluid>
       <AppBreadcrumb />
-    </CContainer>
+    </CContainer> -->
   </CHeader>
 </template>
 
 <script>
-import AppBreadcrumb from './AppBreadcrumb'
+// import AppBreadcrumb from './AppBreadcrumb'
 import AppHeaderDropdownAccnt from './AppHeaderDropdownAccnt'
 import { logo } from '@/assets/brand/logo'
 export default {
   name: 'AppHeader',
   components: {
-    AppBreadcrumb,
+    // AppBreadcrumb,
     AppHeaderDropdownAccnt,
   },
   setup() {

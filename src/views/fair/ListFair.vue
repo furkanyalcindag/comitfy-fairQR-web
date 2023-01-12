@@ -31,6 +31,7 @@
             buttons-pagination
             :loading="fairTable.loading"
             :rows-items="fairTable.rowsItem"
+            rows-per-page-message="sayfa"
           >
             <template #item-name="{ name }">
               <div class="position-relative d-inline-block">
@@ -61,6 +62,10 @@
                   </template>
                 </CTooltip>
               </div>
+            </template>
+            <template #item-active="{ active }">
+              <CIcon v-if="active" icon="cil-check-alt" />
+              <CIcon v-else icon="cil-x" />
             </template>
             <template #item-operations="item">
               <div>
@@ -97,13 +102,13 @@
                     shape="rounded-pill"
                     size="sm"
                     v-c-tooltip="{
-                      content: 'Müşterileri',
+                      content: 'Katılımcıları',
                       placement: 'top',
                     }"
                     @click="
                       $router.push({
                         name: 'FairClientList',
-                        params: { id: item.uuid },
+                        params: { uuid: item.uuid },
                       })
                     "
                   >
@@ -166,11 +171,13 @@
           <CCol md="6">
             <CFormLabel for="add-fair-time-start">Başlangıç Tarihi</CFormLabel>
             <VueCtkDateTimePicker
-              id="EnabledDisabledDatesPicker"
-              v-model="addedItem.startTime"
+              id="add-fair-time-start-value"
+              v-model="addedItem.data.startDate"
               locale="tr"
+              only-date
               :minDate="new Date().toISOString()"
-              format="YYYY-MM-DD HH:mm:ss.SSSS"
+              format="YYYY-MM-DD"
+              formatted="ll"
               label="Başlangıç zamanını seçiniz"
               buttonNowTranslation="Şimdiki Zaman"
               @is-hidden="validateAddedItemDateRange()"
@@ -179,7 +186,7 @@
               id="add-fair-time-start"
               required
               style="display: none"
-              v-model="addedItem.startTime"
+              v-model="addedItem.data.startDate"
               autocomplete="off"
               feedbackInvalid="Lütfen bir tarih giriniz"
             ></CFormInput>
@@ -188,11 +195,13 @@
           <CCol md="6">
             <CFormLabel for="add-fair-time-end">Bitiş Tarihi</CFormLabel>
             <VueCtkDateTimePicker
-              id="EnabledDisabledDatesPicker"
-              v-model="addedItem.endTime"
+              id="add-fair-time-end-value"
+              v-model="addedItem.data.endDate"
               locale="tr"
-              :minDate="addedItem.startTime"
-              format="YYYY-MM-DD HH:mm:ss.SSSS"
+              only-date
+              :minDate="addedItem.data.startDate"
+              format="YYYY-MM-DD"
+              formatted="ll"
               label="Bitiş zamanını seçiniz"
               buttonNowTranslation="Şimdiki Zaman"
               @is-hidden="validateAddedItemDateRange()"
@@ -201,7 +210,7 @@
               id="add-fair-time-end"
               required
               style="display: none"
-              v-model="addedItem.endTime"
+              v-model="addedItem.data.endDate"
               autocomplete="off"
               feedbackInvalid="Lütfen bir tarih giriniz"
             ></CFormInput>
@@ -214,13 +223,21 @@
               />-->
             <!-- <VueCtkDateTimePicker
                 id="EnabledDisabledDatesPicker"
-                v-model="addedItem.endTime.endHalf"
+                v-model="addedItem.data.endDate.endHalf"
                 locale="tr"
                 format="hh:mm:ss.mss"
                 formatted="hh:mm"
                 only-time
                 no-label
               /> -->
+          </CCol>
+          <!-- Active State -->
+          <CCol md="12">
+            <CFormSwitch
+              label="Aktif mi?"
+              id="add-fair-active"
+              v-model="addedItem.data.active"
+            />
           </CCol>
 
           <CModalFooter class="pe-0">
@@ -253,14 +270,14 @@
           <span class="text-danger fw-bolder"> silmek istiyor musunuz? </span>
         </h5>
         <CModalFooter class="pe-0">
-          <CButton color="secondary" @click="closeModal('deleteFairModal')"
+          <CButton
+            color="secondary"
+            @click="closeModal('deleteFairModal', true)"
             >Kapat</CButton
           >
           <CButton
             color="danger"
-            @click="
-              isAbleToPushButton ? deleteCategory(selectedFair.uuid) : null
-            "
+            @click="isAbleToPushButton ? deleteFair(selectedFair.uuid) : null"
             >SİL</CButton
           >
         </CModalFooter>
@@ -296,7 +313,7 @@
               id="edit-fair-name"
               required
               feedbackInvalid="Lütfen bir Fuar adı giriniz"
-              v-model="addedItem.data.name"
+              v-model="editedItem.data.name"
               autocomplete="off"
             />
           </CCol>
@@ -309,53 +326,66 @@
               id="edit-fair-place"
               required
               feedbackInvalid="Lütfen bir Fuar yeri giriniz"
-              v-model="addedItem.data.place"
+              v-model="editedItem.data.place"
               autocomplete="off"
             />
           </CCol>
 
           <CCol md="6">
-            <CFormLabel for="add-fair-time-start">Başlangıç Tarihi</CFormLabel>
+            <CFormLabel for="edit-fair-time-start">Başlangıç Tarihi</CFormLabel>
             <VueCtkDateTimePicker
-              id="EnabledDisabledDatesPicker"
-              v-model="addedItem.startTime"
+              id="edit-fair-time-start-value"
+              v-model="editedItem.data.startDate"
               locale="tr"
+              only-date
               :minDate="new Date().toISOString()"
-              format="YYYY-MM-DD HH:mm:ss.SSSS"
+              format="YYYY-MM-DD"
+              formatted="ll"
               label="Başlangıç zamanını seçiniz"
               buttonNowTranslation="Şimdiki Zaman"
-              @is-hidden="validateAddedItemDateRange()"
+              @is-hidden="validateEditedItemDateRange()"
             />
             <CFormInput
-              id="add-fair-time-start"
+              id="edit-fair-time-start"
               required
               style="display: none"
-              v-model="addedItem.startTime"
+              v-model="editedItem.data.startDate"
               autocomplete="off"
               feedbackInvalid="Lütfen bir tarih giriniz"
             ></CFormInput>
           </CCol>
           <!-- End Date and Time -->
           <CCol md="6">
-            <CFormLabel for="add-fair-time-end">Bitiş Tarihi</CFormLabel>
+            <CFormLabel for="edit-fair-time-end">Bitiş Tarihi</CFormLabel>
             <VueCtkDateTimePicker
-              id="EnabledDisabledDatesPicker"
-              v-model="addedItem.endTime"
+              id="edit-fair-time-end-value"
+              v-model="editedItem.data.endDate"
               locale="tr"
-              :minDate="addedItem.startTime"
-              format="YYYY-MM-DD HH:mm:ss.SSSS"
+              only-date
+              :minDate="editedItem.data.startDate"
+              format="YYYY-MM-DD"
+              formatted="ll"
               label="Bitiş zamanını seçiniz"
               buttonNowTranslation="Şimdiki Zaman"
-              @is-hidden="validateAddedItemDateRange()"
+              @is-hidden="validateEditedItemDateRange()"
             />
             <CFormInput
-              id="add-fair-time-end"
+              id="edit-fair-time-end"
               required
               style="display: none"
-              v-model="addedItem.endTime"
+              v-model="editedItem.data.endDate"
               autocomplete="off"
               feedbackInvalid="Lütfen bir tarih giriniz"
             ></CFormInput>
+          </CCol>
+
+          <!-- Active State -->
+          <CCol md="12">
+            <CFormSwitch
+              label="Aktif mi?"
+              id="edit-fair-active"
+              v-model="editedItem.data.active"
+            />
           </CCol>
 
           <CModalFooter class="pe-0">
@@ -375,32 +405,29 @@
 </template>
 
 <script>
-import avatar from '@/assets/images/avatars/8.jpg'
 import { mapActions } from 'vuex'
 import fairDTO from '@/models/fairDTO'
-import axios from 'axios'
 import Toast from '@/models/create_TOAST_dto'
+// import router from '@/router'
 export default {
-  name: 'Colors',
+  name: 'Fair List',
   components: {
     EasyDataTable: window['vue3-easy-data-table'],
   },
   data() {
     return {
-      avatar: avatar,
       headers: [
         { text: 'Adı', value: 'name', sortable: true },
         { text: 'Yeri', value: 'place' },
         { text: 'Başlangıç Tarihi', value: 'startDate' },
         { text: 'Bitiş Tarihi', value: 'endDate' },
+        { text: 'Aktif', value: 'active' },
         { text: 'İşlemler', value: 'operations' },
       ],
       items: [],
       addedItem: {
         // Real data
         data: fairDTO.createEmpty(),
-        startTime: new Date().toISOString(),
-        endTime: null,
       },
       editedItem: {
         // Real data
@@ -424,7 +451,7 @@ export default {
       },
       validationChecked: false,
       isAbleToPushButton: true,
-      selectedFair: {},
+      selectedFair: fairDTO.createEmpty(),
     }
   },
   watch: {
@@ -432,17 +459,15 @@ export default {
       this.getFairs(newvalue)
     },
   },
-  mounted() {
-    ;(this.isMounted = true), this.login()
-  },
   created() {
     this.getFairs(this.fairTable.serverOptions)
   },
   methods: {
     ...mapActions({
-      getAllCategoryAPI: 'fair/getFairs',
-      deleteCategoryAPI: 'fair/deleteFair',
-      updateCategoryAPI: 'fair/updateFair',
+      getAllFairsAPI: 'fair/getFairs',
+      addFairAPI: 'fair/addFair',
+      deleteFairAPI: 'fair/deleteFair',
+      updateFairAPI: 'fair/updateFair',
     }),
     submitToAPI(event, modalname, data) {
       // Response
@@ -458,12 +483,12 @@ export default {
       switch (modalname) {
         case 'addFairModal':
           {
-            this.addCategory(JSON.parse(JSON.stringify(data)))
+            this.addFair(JSON.parse(JSON.stringify(data)))
           }
           break
         case 'updateFairModal':
           {
-            this.updateCategory(JSON.parse(JSON.stringify(data)))
+            this.updateFair(JSON.parse(JSON.stringify(data)))
           }
           break
       }
@@ -471,18 +496,31 @@ export default {
     // Setting selectedFair every showmodal trigger is not correct idea. It can cause failures due to this. ------------------IMPORTANT
     async showModal(modalname, data) {
       switch (modalname) {
+        case 'deleteFairModal':
+          {
+            this.selectedFair = data
+              ? fairDTO.createFromJson(JSON.parse(JSON.stringify(data)))
+              : {}
+          }
+          break
         case 'addFairModal':
           {
             // If the modal is reseted then reassign current date
-            if (this.addedItem.startTime == null) {
-              this.addedItem.startTime = new Date().toISOString()
-              this.addedItem.endTime = null
+            if (this.addedItem.data.startDate == null) {
+              this.addedItem.data.startDate = new Date()
+                .toISOString()
+                .split('T')[0]
+              this.addedItem.data.endDate = null
             }
           }
           break
         case 'updateFairModal':
           {
-            this.selectedFair = data ? JSON.parse(JSON.stringify(data)) : {}
+            this.selectedFair = data
+              ? fairDTO.createFromJson(JSON.parse(JSON.stringify(data)))
+              : {}
+            let cachedItemData = this.selectedFair
+            this.editedItem.data = cachedItemData
           }
           break
       }
@@ -503,7 +541,7 @@ export default {
             break
           case 'deleteFairModal':
             {
-              this.selectedFair = {}
+              this.selectedFair = fairDTO.createEmpty()
             }
             break
         }
@@ -513,29 +551,89 @@ export default {
     // eslint-disable-next-line no-unused-vars
     async getFairs(pageOptions) {
       this.fairTable.loading = true
-      this.data = [
-        fairDTO.createFromJson({
-          uuid: 'UUID',
-          name: 'FUAR ADI',
-          place: 'FUAR YERI',
-          startDate: 'BAŞLANGIÇ TARİHİ',
-          endDate: 'BİTİŞ TARİHİ',
-        }),
-      ]
-      this.items = this.data
+      const response = await this.getAllFairsAPI(pageOptions)
+      this.items = response ? response.data : []
+      this.fairTable.serverItemsLength = response.totalElements
       this.fairTable.loading = false
+    },
+    async addFair(fairData) {
+      const response = await this.addFairAPI(fairData)
+      if (response == true) {
+        new Toast(
+          'Yeni Fuar ' + '"' + fairData.name + '"' + ' Başarıyla Eklendi',
+          'success',
+          true,
+          'text-white align-items-center',
+        )
+        this.closeModal('addFairModal', true)
+        this.getFairs(this.fairTable.serverOptions)
+      } else {
+        new Toast(
+          'Bir şeyler ters gitti!',
+          'danger',
+          true,
+          'text-white align-items-center',
+        )
+        this.queueEnableSendButton()
+      }
+    },
+    async updateFair(newFairData) {
+      const response = await this.updateFairAPI(newFairData)
+      if (response === true) {
+        new Toast(
+          'Fuar Başarıyla Güncellendi',
+          'success',
+          true,
+          'text-white align-items-center',
+        )
+        this.getFairs(this.fairTable.serverOptions)
+        this.closeModal('updateFairModal', true)
+      } else {
+        new Toast(
+          'Bir şeyler ters gitti!',
+          'danger',
+          true,
+          'text-white align-items-center',
+        )
+        this.queueEnableSendButton()
+      }
+    },
+    async deleteFair(uuid) {
+      this.isAbleToPushButton = false
+      const response = await this.deleteFairAPI(uuid)
+      if (response === true) {
+        new Toast(
+          'Silme işlemi Başarılı',
+          'success',
+          true,
+          'text-white align-items-center',
+        )
+        this.getFairs(this.fairTable.serverOptions)
+        this.closeModal('deleteFairModal', true)
+      } else {
+        new Toast(
+          'Bir şeyler ters gitti!',
+          'danger',
+          true,
+          'text-white align-items-center',
+        )
+        this.queueEnableSendButton()
+      }
     },
     // Checks if start time is lesser than end time or equal then validate it false
     async validateAddedItemDateRange() {
-      if (this.addedItem.startTime | (this.addedItem.endTime != null)) {
+      if (
+        this.addedItem.data.startDate |
+        (this.addedItem.data.endDate != null)
+      ) {
         // Formatting dates to ISO format
         if (
-          Date.parse(this.formatDateToISO(this.addedItem.startTime)) >=
-          Date.parse(this.formatDateToISO(this.addedItem.endTime))
+          Date.parse(this.addedItem.data.startDate) >
+          Date.parse(this.addedItem.data.endDate)
         ) {
-          this.addedItem.endTime = null
+          this.addedItem.data.endDate = null
           new Toast(
-            'Cant select EndTime equal-lesser than StartTime',
+            'Bitiş Zamanı Başlangıç ​​Zamanından daha az seçilemez',
             'danger',
             true,
             'text-white -align-items-center',
@@ -544,15 +642,18 @@ export default {
       }
     },
     async validateEditedItemDateRange() {
-      if (this.editedItem.startTime | (this.editedItem.endTime != null)) {
+      if (
+        this.editedItem.data.startDate |
+        (this.editedItem.data.endDate != null)
+      ) {
         // Formatting dates to ISO format
         if (
-          Date.parse(this.formatDateToISO(this.editedItem.startTime)) >=
-          Date.parse(this.formatDateToISO(this.editedItem.endTime))
+          Date.parse(this.editedItem.data.startDate) >
+          Date.parse(this.editedItem.data.endDate)
         ) {
-          this.editedItem.endTime = null
+          this.editedItem.data.endDate = null
           new Toast(
-            'Cant select EndTime equal-lesser than StartTime',
+            'Bitiş Zamanı Başlangıç ​​Zamanından daha az seçilemez',
             'danger',
             true,
             'text-white -align-items-center',
@@ -564,9 +665,6 @@ export default {
     formatDateToISO(date) {
       let splittedTime = date.split(' ')
       return splittedTime[0] + 'T' + splittedTime[1] + 'Z'
-    },
-    login() {
-      axios.get('https://jsonplaceholder.typicode.com/posts/1').catch(() => {})
     },
     async queueEnableSendButton() {
       await this.$store.dispatch('invokeSendButtonDelay')
