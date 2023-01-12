@@ -34,7 +34,7 @@ export default {
         })
       return response
     },
-    async getSearchFilter(state, { searchText, pageOptions }) {
+    async getFairBySearch(state, { searchText, pageOptions }) {
       // CHECK IF USER LOGGED IN ALREADY
 
       // ROLE CHECK IS NEEDED HERE DUE BY SECURITY -----------IMPORTANT
@@ -169,7 +169,6 @@ export default {
           pageSize: 1,
         }),
       )
-      console.log(data)
 
       // ROLE CHECK IS NEEDED HERE DUE BY SECURITY -----------IMPORTANT
       var axios = require('axios')

@@ -3,7 +3,7 @@
     <CCol class="justify-content-start">
       <CRow class="mb-2">
         <CForm
-          @submit.prevent="isAbleToPushButton ? handleSearchFilter() : null"
+          @submit.prevent="isAbleToPushButton ? handleFairSearch() : null"
           class="position-relative"
         >
           <CInputGroup class="position-relative end-0">
@@ -11,7 +11,7 @@
               id="exampleColorInput"
               class="mb-1 me-2"
               style="padding-right: 44px"
-              placeholder="Ara.."
+              placeholder="İsim ile Fuar Ara.."
               shape="rounded-pill"
               v-model="searchText"
             />
@@ -21,7 +21,7 @@
               style="z-index: 10"
               shape="rounded-pill"
               size="lg"
-              :type="isAbleToPushButton ? 'submit' : ''"
+              :type="isAbleToPushButton ? 'submit' : null"
               ><CIcon icon="cil-Search"
             /></CButton>
           </CInputGroup>
@@ -496,7 +496,7 @@ export default {
   methods: {
     ...mapActions({
       getAllFairsAPI: 'fair/getFairs',
-      getSearchFilterAPI: 'fair/getSearchFilter',
+      getFairBySearchAPI: 'fair/getFairBySearch',
       addFairAPI: 'fair/addFair',
       deleteFairAPI: 'fair/deleteFair',
       updateFairAPI: 'fair/updateFair',
@@ -703,15 +703,15 @@ export default {
       this.isAbleToPushButton = true
     },
 
-    async handleSearchFilter() {
+    async handleFairSearch() {
       this.isAbleToPushButton = false
-      const response = await this.getSearchFilterAPI({
+      this.fairTable.loading = true
+      const response = await this.getFairBySearchAPI({
         searchText: this.searchText,
         pageOptions: this.fairTable.serverOptions,
       })
-      console.log(response.data)
-
       this.items = response ? (response.data ? response.data : []) : []
+      this.fairTable.loading = false
       this.queueEnableSendButton()
     },
   },
