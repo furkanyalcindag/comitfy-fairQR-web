@@ -622,6 +622,7 @@ export default {
     async getParticipantPDF({ participant }) {
       const response = await this.getParticipantPDFAPI({
         participant: participant,
+        fair: this.selectedFair,
       })
       if (response == true) {
         new Toast(

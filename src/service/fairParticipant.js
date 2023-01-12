@@ -129,7 +129,7 @@ export default {
         })
       return response
     },
-    async getParticipantPDF(state, { participant = null }) {
+    async getParticipantPDF(state, { participant = null, fair = null }) {
       var axios = require('axios')
       var config = {
         method: 'get',
@@ -143,7 +143,7 @@ export default {
         .then(function (response) {
           store.dispatch('downloadPDF', {
             data: response.data,
-            pdfName: participant.email,
+            pdfName: fair.name + '_' + participant.email + '_bilet',
           })
           return true
         })
