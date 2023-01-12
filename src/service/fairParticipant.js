@@ -1,5 +1,6 @@
 /* eslint-disable */
 import FairParticipantDTO from '@/models/fairParticipantDTO'
+import FilterSearchDTO from '@/models/filterSearchDto'
 import store from '@/store/index'
 export default {
   namespaced: true,
@@ -20,6 +21,36 @@ export default {
       var config = {
         method: 'post',
         url: 'fair-participant/get-participants-by-fair/' + fairUUID,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      }
+      const response = await axios(config)
+        .then(function (response) {
+          return response.data
+        })
+        .catch(function (error) {
+          console.log(error)
+          return null
+        })
+      return response
+    },
+
+    async getParticipantsBySearch(state, { searchText, pageOptions, id }) {
+      // CHECK IF USER LOGGED IN ALREADY
+
+      // ROLE CHECK IS NEEDED HERE DUE BY SECURITY -----------IMPORTANT
+      var axios = require('axios')
+      var data = FilterSearchDTO.createFromJson({
+        filters: [{ key: 'email', operation: ':', value: searchText }],
+        pageNumber: pageOptions.page - 1,
+        pageSize: pageOptions.rowsPerPage,
+      })
+
+      var config = {
+        method: 'post',
+        url: 'fair-participant/get-participants-by-fair/' + id ,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -144,6 +175,30 @@ export default {
           store.dispatch('downloadPDF', {
             data: response.data,
             pdfName: fair.name + '_' + participant.email + '_bilet',
+          })
+          return true
+        })
+        .catch(function (error) {
+          console.log(error)
+          return false
+        })
+      return response
+    },
+
+    async getParticipantListExcel(state, { fair = null }) {
+      var axios = require('axios')
+      var config = {
+        method: 'post',
+        // The uuid must be participant ------------IMPORTANT
+        url: 'fair-participant/generate-excel-participant-by-fair/' + fair.uuid,
+        responseType: 'blob',
+      }
+
+      const response = await axios(config)
+        .then(function (response) {
+          store.dispatch('downloadExcel', {
+            data: response.data,
+            excelName: fair.name + '_katilimci_listesi',
           })
           return true
         })

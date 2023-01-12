@@ -53,6 +53,19 @@ export default createStore({
       document.body.appendChild(link)
       link.click()
     },
+    downloadExcel(state, { data = null, excelName = null }) {
+      const url = window.URL.createObjectURL(
+        new Blob([data], { type: 'application/vnd.ms-excel' }),
+      )
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute(
+        'download',
+        excelName ? excelName.replace(/\s/g, '-') + '.xlsx' : 'report.xlsx',
+      )
+      document.body.appendChild(link)
+      link.click()
+    },
   },
   modules: {
     auth,

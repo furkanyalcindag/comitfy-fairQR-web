@@ -4,6 +4,34 @@
       <CSpinner color="dark" />
     </CRow>
     <CCol v-else-if="isLoadingFair === false" class="justify-content-start">
+      <CRow class="mb-2">
+        <CForm
+          @submit.prevent="
+            isAbleToPushButton ? handleParticipantSearch() : null
+          "
+          class="position-relative"
+        >
+          <CInputGroup class="position-relative end-0">
+            <CFormInput
+              id="exampleColorInput"
+              class="mb-1 me-2"
+              style="padding-right: 44px"
+              placeholder="E-posta ile  katılımcı  Ara.."
+              shape="rounded-pill"
+              v-model="searchText"
+            />
+            <CButton
+              color="primary"
+              class="float-end position-absolute end-0 bottom-0"
+              style="z-index: 10"
+              shape="rounded-pill"
+              size="lg"
+              :type="isAbleToPushButton ? 'submit' : null"
+              ><CIcon icon="cil-Search"
+            /></CButton>
+          </CInputGroup>
+        </CForm>
+      </CRow>
       <CCard>
         <CCardHeader>
           <CRow class="align-content-start">
@@ -21,6 +49,18 @@
                 shape="rounded-pill"
                 @click="showModal('addParticipantModal')"
                 ><small>Ekle</small></CButton
+              >
+              <CButton
+                style="height: 20px"
+                shape="rounded-pill"
+                color="primary"
+                class="d-flex float-end align-items-center px-2 mx-1"
+                @click="
+                  isAbleToPushButton
+                    ? handleParticipantListExcelDownload()
+                    : null
+                "
+                ><small>Excel</small></CButton
               >
             </CCol>
           </CRow>
@@ -391,6 +431,7 @@ export default {
         { text: 'İşlemler', value: 'operations' },
       ],
       items: [],
+      searchText: '',
       addedItem: {
         // Real data
         data: fairClientDTO.createEmpty(),
@@ -434,10 +475,12 @@ export default {
     ...mapActions({
       getFairAPI: 'fair/getFair',
       getParticipantsByFairAPI: 'fairParticipant/getParticipantsByFair',
+      getParticipantBySearchAPI: 'fairParticipant/getParticipantsBySearch',
       addParticipantToFairAPI: 'fairParticipant/addParticipantToFair',
       deletePaticipantAPI: 'fairParticipant/deleteParticipant',
       updateParticipantAPI: 'fairParticipant/updateParticipant',
       getParticipantPDFAPI: 'fairParticipant/getParticipantPDF',
+      getParticipantListExcelAPI: 'fairParticipant/getParticipantListExcel',
     }),
     submitToAPI(event, modalname, data) {
       // Response
@@ -646,6 +689,42 @@ export default {
       }
       this.queueEnableSendButton()
     },
+    async handleParticipantSearch() {
+      this.isAbleToPushButton = false
+      this.fairParticipantsTable.loading = true
+      const response = await this.getParticipantBySearchAPI({
+        searchText: this.searchText,
+        pageOptions: this.fairParticipantsTable.serverOptions,
+        id: this.uuid,
+      })
+      this.fairParticipantsTable.loading = false
+      this.items = response ? (response.data ? response.data : []) : []
+      this.queueEnableSendButton()
+    },
+
+    async handleParticipantListExcelDownload() {
+      this.isAbleToPushButton = false
+      const response = await this.getParticipantListExcelAPI({
+        fair: this.selectedFair,
+      })
+      if (response == true) {
+        new Toast(
+          'Excel indiriliyor...',
+          'success',
+          true,
+          'text-white align-items-center',
+        )
+      } else {
+        new Toast(
+          'Bir şeyler ters gitti!',
+          'danger',
+          true,
+          'text-white align-items-center',
+        )
+      }
+      this.queueEnableSendButton()
+    },
+
     // eslint-disable-next-line no-unused-vars
     async queueEnableSendButton() {
       await this.$store.dispatch('invokeSendButtonDelay')
