@@ -135,7 +135,7 @@ export default {
         method: 'get',
         // The uuid must be participant ------------IMPORTANT
         url: 'fair-participant/generate-ticket/' + participant.uuid,
-        headers: {},
+        headers: {'content-type': 'application/pdf'},
         responseType: 'arraybuffer',
       }
 

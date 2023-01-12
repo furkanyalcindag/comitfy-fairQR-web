@@ -103,7 +103,11 @@
                       content: 'PDF',
                       placement: 'top',
                     }"
-                    @click="getParticipantPDF({ participant: item })"
+                    @click="
+                      isAbleToPushButton
+                        ? getParticipantPDF({ participant: item })
+                        : null
+                    "
                   >
                     <CIcon icon="cil-address-book" />
                   </CButton>
@@ -620,6 +624,7 @@ export default {
       }
     },
     async getParticipantPDF({ participant }) {
+      this.isAbleToPushButton = false
       const response = await this.getParticipantPDFAPI({
         participant: participant,
         fair: this.selectedFair,

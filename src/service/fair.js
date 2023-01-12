@@ -139,7 +139,6 @@ export default {
           pageSize: 1,
         }),
       )
-      console.log(data)
 
       // ROLE CHECK IS NEEDED HERE DUE BY SECURITY -----------IMPORTANT
       var axios = require('axios')
