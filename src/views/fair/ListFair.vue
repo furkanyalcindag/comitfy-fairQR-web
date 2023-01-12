@@ -1,6 +1,32 @@
 <template>
   <CRow>
     <CCol class="justify-content-start">
+      <CRow class="mb-2">
+        <CForm
+          @submit.prevent="isAbleToPushButton ? handleFairSearch() : null"
+          class="position-relative"
+        >
+          <CInputGroup class="position-relative end-0">
+            <CFormInput
+              id="exampleColorInput"
+              class="mb-1 me-2"
+              style="padding-right: 44px"
+              placeholder="İsim ile Fuar Ara.."
+              shape="rounded-pill"
+              v-model="searchText"
+            />
+            <CButton
+              color="primary"
+              class="float-end position-absolute end-0 bottom-0"
+              style="z-index: 10"
+              shape="rounded-pill"
+              size="lg"
+              :type="isAbleToPushButton ? 'submit' : null"
+              ><CIcon icon="cil-Search"
+            /></CButton>
+          </CInputGroup>
+        </CForm>
+      </CRow>
       <CCard>
         <CCardHeader>
           <!-- <CIcon icon="cil-user" /> -->
@@ -14,8 +40,9 @@
                 class="float-end"
                 shape="rounded-pill"
                 @click="showModal('addFairModal')"
-                >Ekle</CButton
               >
+                Ekle
+              </CButton>
             </CCol>
           </CRow>
         </CCardHeader>
@@ -32,6 +59,7 @@
             :loading="fairTable.loading"
             :rows-items="fairTable.rowsItem"
             rows-per-page-message="sayfa"
+            empty-message="Bulunamadı!"
           >
             <template #item-name="{ name }">
               <div class="position-relative d-inline-block">
@@ -408,11 +436,13 @@
 import { mapActions } from 'vuex'
 import fairDTO from '@/models/fairDTO'
 import Toast from '@/models/create_TOAST_dto'
+import { CForm } from '@coreui/vue'
 // import router from '@/router'
 export default {
   name: 'Fair List',
   components: {
     EasyDataTable: window['vue3-easy-data-table'],
+    CForm,
   },
   data() {
     return {
@@ -425,6 +455,7 @@ export default {
         { text: 'İşlemler', value: 'operations' },
       ],
       items: [],
+      searchText: '',
       addedItem: {
         // Real data
         data: fairDTO.createEmpty(),
@@ -465,6 +496,7 @@ export default {
   methods: {
     ...mapActions({
       getAllFairsAPI: 'fair/getFairs',
+      getFairBySearchAPI: 'fair/getFairBySearch',
       addFairAPI: 'fair/addFair',
       deleteFairAPI: 'fair/deleteFair',
       updateFairAPI: 'fair/updateFair',
@@ -669,6 +701,18 @@ export default {
     async queueEnableSendButton() {
       await this.$store.dispatch('invokeSendButtonDelay')
       this.isAbleToPushButton = true
+    },
+
+    async handleFairSearch() {
+      this.isAbleToPushButton = false
+      this.fairTable.loading = true
+      const response = await this.getFairBySearchAPI({
+        searchText: this.searchText,
+        pageOptions: this.fairTable.serverOptions,
+      })
+      this.items = response ? (response.data ? response.data : []) : []
+      this.fairTable.loading = false
+      this.queueEnableSendButton()
     },
   },
 }

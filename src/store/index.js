@@ -49,7 +49,23 @@ export default createStore({
       )
       const link = document.createElement('a')
       link.href = url
-      link.setAttribute('download', pdfName ? pdfName + '.pdf' : 'report.pdf')
+      link.setAttribute(
+        'download',
+        pdfName ? pdfName.replace(/\s/g, '-') + '.pdf' : 'report.pdf',
+      )
+      document.body.appendChild(link)
+      link.click()
+    },
+    downloadExcel(state, { data = null, excelName = null }) {
+      const url = window.URL.createObjectURL(
+        new Blob([data], { type: 'application/vnd.ms-excel' }),
+      )
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute(
+        'download',
+        excelName ? excelName.replace(/\s/g, '-') + '.xlsx' : 'report.xlsx',
+      )
       document.body.appendChild(link)
       link.click()
     },
