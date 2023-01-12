@@ -22,6 +22,13 @@
                 @click="showModal('addParticipantModal')"
                 ><small>Ekle</small></CButton
               >
+              <CButton
+                style="height: 20px"
+                shape="rounded-pill"
+                color="primary"
+                class="d-flex float-end align-items-center px-2 mx-1"
+                ><small>Excel</small></CButton
+              >
             </CCol>
           </CRow>
 

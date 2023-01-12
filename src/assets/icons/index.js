@@ -29,6 +29,7 @@ import {
   cilArrowBottom,
   cilArrowRight,
   cilArrowTop,
+  cilSearch,
   cilBan,
   cilBasket,
   cilBell,
@@ -191,5 +192,6 @@ export const iconsSet = Object.assign(
     cibCcPaypal,
     cibCcApplePay,
     cibCcAmex,
+    cilSearch,
   },
 )

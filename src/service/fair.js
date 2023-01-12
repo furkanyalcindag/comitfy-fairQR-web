@@ -1,4 +1,5 @@
 import fairDTO from '@/models/fairDTO'
+import FilterSearchDTO from '@/models/filterSearchDto'
 export default {
   namespaced: true,
   state: {},
@@ -15,6 +16,35 @@ export default {
         pageNumber: page.page - 1,
         pageSize: page.rowsPerPage,
       })
+      var config = {
+        method: 'post',
+        url: 'fair/get-all-by-filter',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      }
+      const response = await axios(config)
+        .then(function (response) {
+          return response.data
+        })
+        .catch(function (error) {
+          console.log(error)
+          return null
+        })
+      return response
+    },
+    async getSearchFilter(state, { searchText, pageOptions }) {
+      // CHECK IF USER LOGGED IN ALREADY
+
+      // ROLE CHECK IS NEEDED HERE DUE BY SECURITY -----------IMPORTANT
+      var axios = require('axios')
+      var data = FilterSearchDTO.createFromJson({
+        filters: [{ key: 'name', operation: ':', value: searchText }],
+        pageNumber: pageOptions.page - 1,
+        pageSize: pageOptions.rowsPerPage,
+      })
+
       var config = {
         method: 'post',
         url: 'fair/get-all-by-filter',
