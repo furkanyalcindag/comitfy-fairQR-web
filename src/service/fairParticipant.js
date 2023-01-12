@@ -184,6 +184,30 @@ export default {
         })
       return response
     },
+
+    async getParticipantListExcel(state, { fair = null }) {
+      var axios = require('axios')
+      var config = {
+        method: 'post',
+        // The uuid must be participant ------------IMPORTANT
+        url: 'fair-participant/generate-excel-participant-by-fair/' + fair.uuid,
+        responseType: 'blob',
+      }
+
+      const response = await axios(config)
+        .then(function (response) {
+          store.dispatch('downloadExcel', {
+            data: response.data,
+            excelName: fair.name + '_katilimci_listesi',
+          })
+          return true
+        })
+        .catch(function (error) {
+          console.log(error)
+          return false
+        })
+      return response
+    },
   },
   getters: {},
 }

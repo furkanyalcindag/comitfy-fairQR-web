@@ -55,6 +55,11 @@
                 shape="rounded-pill"
                 color="primary"
                 class="d-flex float-end align-items-center px-2 mx-1"
+                @click="
+                  isAbleToPushButton
+                    ? handleParticipantListExcelDownload()
+                    : null
+                "
                 ><small>Excel</small></CButton
               >
             </CCol>
@@ -471,6 +476,7 @@ export default {
       deletePaticipantAPI: 'fairParticipant/deleteParticipant',
       updateParticipantAPI: 'fairParticipant/updateParticipant',
       getParticipantPDFAPI: 'fairParticipant/getParticipantPDF',
+      getParticipantListExcelAPI: 'fairParticipant/getParticipantListExcel',
     }),
     submitToAPI(event, modalname, data) {
       // Response
@@ -689,6 +695,30 @@ export default {
       this.items = response ? (response.data ? response.data : []) : []
       this.queueEnableSendButton()
     },
+
+    async handleParticipantListExcelDownload() {
+      this.isAbleToPushButton = false
+      const response = await this.getParticipantListExcelAPI({
+        fair: this.selectedFair,
+      })
+      if (response == true) {
+        new Toast(
+          'Excel indiriliyor...',
+          'success',
+          true,
+          'text-white align-items-center',
+        )
+      } else {
+        new Toast(
+          'Bir şeyler ters gitti!',
+          'danger',
+          true,
+          'text-white align-items-center',
+        )
+      }
+      this.queueEnableSendButton()
+    },
+
     // eslint-disable-next-line no-unused-vars
     async queueEnableSendButton() {
       await this.$store.dispatch('invokeSendButtonDelay')
