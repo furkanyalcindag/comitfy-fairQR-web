@@ -5,32 +5,34 @@
     </CRow>
     <CCol v-else-if="isLoadingFair === false" class="justify-content-start">
       <CRow class="mb-2">
-        <CForm
-          @submit.prevent="
-            isAbleToPushButton ? handleParticipantSearch() : null
-          "
-          class="position-relative"
-        >
-          <CInputGroup class="position-relative end-0">
-            <CFormInput
-              id="exampleColorInput"
-              class="mb-1 me-2"
-              style="padding-right: 44px"
-              placeholder="E-posta ile  katılımcı  Ara.."
-              shape="rounded-pill"
-              v-model="searchText"
-            />
-            <CButton
-              color="primary"
-              class="float-end position-absolute end-0 bottom-0"
-              style="z-index: 10"
-              shape="rounded-pill"
-              size="lg"
-              :type="isAbleToPushButton ? 'submit' : null"
-              ><CIcon icon="cil-Search"
-            /></CButton>
-          </CInputGroup>
-        </CForm>
+        <Transition appear appear-active-class="fade-enter-active">
+          <CForm
+            @submit.prevent="
+              isAbleToPushButton ? handleParticipantSearch() : null
+            "
+            class="position-relative"
+          >
+            <CInputGroup class="position-relative end-0">
+              <CFormInput
+                id="exampleColorInput"
+                class="mb-1 me-2"
+                style="padding-right: 44px"
+                placeholder="E-posta ile  katılımcı  Ara.."
+                shape="rounded-pill"
+                v-model="searchText"
+              />
+              <CButton
+                color="primary"
+                class="float-end position-absolute end-0 bottom-0"
+                style="z-index: 10"
+                shape="rounded-pill"
+                size="lg"
+                :type="isAbleToPushButton ? 'submit' : null"
+                ><CIcon icon="cil-Search"
+              /></CButton>
+            </CInputGroup>
+          </CForm>
+        </Transition>
       </CRow>
       <CCard>
         <CCardHeader>
@@ -745,5 +747,20 @@ export default {
 }
 .rounder {
   border-radius: 50%;
+}
+
+.fade-enter-active {
+  animation: go 1.25s ease-out;
+}
+
+@keyframes go {
+  from {
+    opacity: 0;
+    max-width: 75px;
+  }
+  to {
+    opacity: 1;
+    max-width: full;
+  }
 }
 </style>

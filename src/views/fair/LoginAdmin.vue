@@ -24,12 +24,23 @@
                       <CIcon icon="cil-lock-locked" />
                     </CInputGroupText>
                     <CFormInput
-                      type="password"
+                      class="position-relative"
+                      :type="isShow ? 'text' : 'password'"
                       placeholder="Şifre"
+                      style="padding-right: 50px"
                       autocomplete="current-password"
                       v-model="data.password"
                       @input="isFailedToLogin = false"
                     />
+                    <button
+                      v-if="data.password"
+                      @click="showPassword"
+                      type="button"
+                      class="bg-transparent border-0 me-1 outline-0 position-absolute end-0 mt-2"
+                      style="font-size: small; z-index: 15; color: #000000ba"
+                    >
+                      {{ isShow ? 'Gizle' : 'Göster' }}
+                    </button>
                   </CInputGroup>
                   <span v-if="isFailedToLogin" class="text-danger">{{
                     failedToLoginText
@@ -67,6 +78,7 @@ export default {
         email: '',
         password: '',
       },
+      isShow: false,
       isRememberUseActive: false,
       isFailedToLogin: false,
       isAbleToLogin: true,
@@ -78,6 +90,9 @@ export default {
       // filename/action
       signIn: 'auth/signIn',
     }),
+    showPassword() {
+      this.isShow = !this.isShow
+    },
 
     /*  ...mapGetters({
       checkIfLoggedIn: 'auth/checkIfLoggedIn',
