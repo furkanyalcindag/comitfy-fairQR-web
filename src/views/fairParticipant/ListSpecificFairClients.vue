@@ -75,7 +75,6 @@
         <CCardBody class="p-0">
           <easy-data-table
             show-index
-            v-model:itemsSelected="itemsSelected"
             v-model:server-options="fairParticipantsTable.serverOptions"
             :server-items-length="fairParticipantsTable.serverItemsLength"
             :headers="headers"
@@ -86,6 +85,12 @@
             :rows-items="fairParticipantsTable.rowsItem"
             rows-per-page-message="sayfa"
           >
+            <template #header-index="header">
+              <div class="text-center w-100">{{ header.text }}</div>
+            </template>
+            <template #item-index="{ index }">
+              <div class="text-center">{{ index }}</div>
+            </template>
             <template #item-name="{ firstName, lastName }">
               <div>{{ firstName }} | {{ lastName }}</div>
             </template>
@@ -735,6 +740,9 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.direction-left {
+  text-align: center !important;
+}
 .rounder {
   border-radius: 50%;
 }

@@ -5,7 +5,10 @@
         <CIcon icon="cil-menu" size="lg" />
       </CHeaderToggler>
       <CHeaderBrand class="mx-auto d-lg-none" to="/">
-        <CIcon :icon="logo" height="48" alt="Logo" />
+        <img
+          style="filter: invert(100%)"
+          src="https://www.comitfy.com/wp-content/uploads/2022/01/imageonline-co-whitebackgroundremoved-1-e1641159740659.png"
+        />
       </CHeaderBrand>
       <CHeaderNav class="d-none d-md-flex me-auto">
         <CNavItem>
@@ -56,7 +59,6 @@
 <script>
 // import AppBreadcrumb from './AppBreadcrumb'
 import AppHeaderDropdownAccnt from './AppHeaderDropdownAccnt'
-import { logo } from '@/assets/brand/logo'
 export default {
   name: 'AppHeader',
   components: {
@@ -64,9 +66,7 @@ export default {
     AppHeaderDropdownAccnt,
   },
   setup() {
-    return {
-      logo,
-    }
+    return {}
   },
 }
 </script>

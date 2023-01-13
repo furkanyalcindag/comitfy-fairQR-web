@@ -49,7 +49,6 @@
         <CCardBody class="p-0">
           <easy-data-table
             show-index
-            v-model:itemsSelected="itemsSelected"
             v-model:server-options="fairTable.serverOptions"
             :server-items-length="fairTable.serverItemsLength"
             :headers="headers"
@@ -61,6 +60,12 @@
             rows-per-page-message="sayfa"
             empty-message="Bulunamadı!"
           >
+            <template #header-index="header">
+              <div class="text-center w-100">{{ header.text }}</div>
+            </template>
+            <template #item-index="{ index }">
+              <div class="text-center">{{ index }}</div>
+            </template>
             <template #item-name="{ name }">
               <div class="position-relative d-inline-block">
                 <CTooltip :content="name" placement="top">

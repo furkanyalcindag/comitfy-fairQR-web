@@ -1,5 +1,5 @@
 import { h, resolveComponent } from 'vue'
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import DefaultLayout from '@/layouts/DefaultLayout'
 
@@ -121,16 +121,20 @@ const routes = [
       },
     ],
   },
-
+  {
+    path: '/404',
+    name: 'Notfound404',
+    component: () => import('@/views/pages/Page404'),
+  },
   {
     path: '/:catchAll(.*)',
     name: 'Notfound',
-    component: () => import('@/views/pages/Page404'),
+    redirect: '/404',
   },
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(process.env.BASE_URL),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
   scrollBehavior() {
     // always scroll to top
