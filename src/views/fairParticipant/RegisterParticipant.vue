@@ -184,6 +184,12 @@ export default {
       this.queueEnableSendButton()
     },
     async addNewParticipantToActiveFair({ participantData }) {
+      new Toast(
+        'İndirme işlemi hazırlanıyor...',
+        'info',
+        true,
+        'text-white align-items-center',
+      )
       const response = await this.addParticipantToCurrentActiveFairAPI({
         participantData: participantData,
       })
