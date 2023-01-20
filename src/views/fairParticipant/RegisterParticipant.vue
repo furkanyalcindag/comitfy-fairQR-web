@@ -90,6 +90,30 @@
                   />
                 </CInputGroup>
 
+                <CInputGroup class="mb-3">
+                  <CInputGroupText style="max-height: 39px">
+                    <CIcon icon="cilHouse" />
+                  </CInputGroupText>
+
+                  <CFormSelect
+                    id="edit-fair-client-city"
+                    size="sm"
+                    class="mb-3 p-2"
+                    @change="addedItem.data.city = $event.target.value"
+                    required
+                    feedbackInvalid="Lütfen bir Şehir Seçiniz"
+                  >
+                    <option value="">--- Şehir Seçiniz ---</option>
+                    <option
+                      v-for="city in cityList"
+                      :key="city.index"
+                      :value="city"
+                    >
+                      {{ city }}
+                    </option>
+                  </CFormSelect>
+                </CInputGroup>
+
                 <div class="d-grid">
                   <CButton
                     color="secondary"
@@ -123,6 +147,7 @@ export default {
   name: 'Register Participant',
   data() {
     return {
+      cityList: [],
       addedItem: {
         // Real data
         data: FairParticipantDTO.createEmpty(),
@@ -134,11 +159,13 @@ export default {
   },
   created() {
     this.isAdmin = this.$route.name == 'Register Participant Admin'
+    this.getParticipantListCity()
   },
   methods: {
     ...mapActions({
       addParticipantToCurrentActiveFairAPI:
         'fairParticipant/addParticipantToCurrentActiveFair',
+      getParicipantListCityAPI: 'fairParticipant/getParticipantListCity',
     }),
     // eslint-disable-next-line no-unused-vars
     submitToAPI({ event, newParticipantData }) {
@@ -185,6 +212,12 @@ export default {
           true,
           'text-white align-items-center',
         )
+      }
+    },
+    async getParticipantListCity() {
+      const response = await this.getParicipantListCityAPI()
+      if (response) {
+        this.cityList = response
       }
     },
     async queueEnableSendButton() {

@@ -208,6 +208,30 @@ export default {
         })
       return response
     },
+    
+    async getParticipantListCity(state) {
+      // CHECK IF USER LOGGED IN ALREADY
+
+      // ROLE CHECK IS NEEDED HERE DUE BY SECURITY -----------IMPORTANT
+      var axios = require('axios')
+      var config = {
+        method: 'post',
+        url: '/settings/city-api',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+      const response = await axios(config)
+        .then(function (response) {
+          return response.data
+        })
+        .catch(function (error) {
+          console.log(error)
+          return null
+        })
+      return response
+    },
+
   },
   getters: {},
 }
