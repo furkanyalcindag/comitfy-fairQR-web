@@ -30,6 +30,7 @@ import {
   cilArrowRight,
   cilArrowTop,
   cilSearch,
+  cilHouse,
   cilBan,
   cilBasket,
   cilBell,
@@ -193,5 +194,6 @@ export const iconsSet = Object.assign(
     cibCcApplePay,
     cibCcAmex,
     cilSearch,
+    cilHouse,
   },
 )

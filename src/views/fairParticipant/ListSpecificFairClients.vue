@@ -94,9 +94,8 @@
               <div class="text-center">{{ index }}</div>
             </template>
             <template #item-name="{ firstName, lastName }">
-              <div>{{ firstName }} | {{ lastName }}</div>
+              <div>{{ firstName }} {{ lastName }}</div>
             </template>
-
             <template #item-companyName="{ companyName }">
               <div class="position-relative d-inline-block">
                 <CTooltip :content="companyName" placement="top">
@@ -206,6 +205,7 @@
             <CFormLabel for="add-fair-client-lastname"
               >Katılımcı Soyadı<span class="text-danger">*</span></CFormLabel
             >
+
             <CFormInput
               id="add-fair-client-lastname"
               required
@@ -242,7 +242,7 @@
             />
           </CCol>
           <!-- Company Name -->
-          <CCol md="12">
+          <CCol md="6">
             <CFormLabel for="add-fair-client-companyname"
               >Firma Adı<span class="text-danger">*</span></CFormLabel
             >
@@ -253,6 +253,25 @@
               v-model="addedItem.data.companyName"
               autocomplete="off"
             />
+          </CCol>
+          <!-- City Name -->
+          <CCol md="6">
+            <CFormLabel for="add-fair-client-city"
+              >Şehir<span class="text-danger">*</span></CFormLabel
+            >
+            <CFormSelect
+              id="add-fair-client-city"
+              size="sm"
+              class="mb-3 p-2"
+              @change="addedItem.data.city = $event.target.value"
+              required
+              feedbackInvalid="Lütfen bir Şehir Seçiniz"
+            >
+              <option value="">--- Şehir Seçiniz ---</option>
+              <option v-for="city in cityList" :key="city.index" :value="city">
+                {{ city }}
+              </option>
+            </CFormSelect>
           </CCol>
 
           <CModalFooter class="pe-0">
@@ -384,7 +403,7 @@
             />
           </CCol>
           <!-- Company Name -->
-          <CCol md="12">
+          <CCol md="6">
             <CFormLabel for="edit-fair-client-companyname"
               >Firma Adı<span class="text-danger">*</span></CFormLabel
             >
@@ -395,6 +414,27 @@
               v-model="editedItem.data.companyName"
               autocomplete="off"
             />
+          </CCol>
+          <!-- City Name -->
+          <CCol md="6">
+            <CFormLabel for="edit-fair-client-city"
+              >Şehir<span class="text-danger">*</span></CFormLabel
+            >
+            <CFormSelect
+              id="edit-fair-client-city"
+              size="sm"
+              class="mb-3 p-2"
+              @change="editedItem.data.city = $event.target.value"
+              required
+              feedbackInvalid="Lütfen bir Şehir Seçiniz"
+            >
+              <option :value="editedItem.data.city">
+                {{ editedItem.data.city }}
+              </option>
+              <option v-for="city in cityList" :key="city.index" :value="city">
+                {{ city }}
+              </option>
+            </CFormSelect>
           </CCol>
 
           <CModalFooter class="pe-0">
@@ -435,9 +475,11 @@ export default {
         { text: 'Firma Adı', value: 'companyName' },
         { text: 'Telefon', value: 'mobilePhone' },
         { text: 'Email', value: 'email' },
+        { text: 'Şehir', value: 'city' },
         { text: 'İşlemler', value: 'operations' },
       ],
       items: [],
+      cityList: [],
       searchText: '',
       addedItem: {
         // Real data
@@ -477,18 +519,21 @@ export default {
   },
   created() {
     this.getFair({ uuid: this.uuid })
+    this.getParticipantListCity()
   },
   methods: {
     ...mapActions({
       getFairAPI: 'fair/getFair',
       getParticipantsByFairAPI: 'fairParticipant/getParticipantsByFair',
       getParticipantBySearchAPI: 'fairParticipant/getParticipantsBySearch',
+      getParicipantListCityAPI: 'fairParticipant/getParticipantListCity',
       addParticipantToFairAPI: 'fairParticipant/addParticipantToFair',
       deletePaticipantAPI: 'fairParticipant/deleteParticipant',
       updateParticipantAPI: 'fairParticipant/updateParticipant',
       getParticipantPDFAPI: 'fairParticipant/getParticipantPDF',
       getParticipantListExcelAPI: 'fairParticipant/getParticipantListExcel',
     }),
+
     submitToAPI(event, modalname, data) {
       // Response
       this.isAbleToPushButton = false
@@ -674,6 +719,12 @@ export default {
       }
     },
     async getParticipantPDF({ participant }) {
+      new Toast(
+        'İndirme işlemi hazırlanıyor...',
+        'info',
+        true,
+        'text-white align-items-center',
+      )
       this.isAbleToPushButton = false
       const response = await this.getParticipantPDFAPI({
         participant: participant,
@@ -696,6 +747,14 @@ export default {
       }
       this.queueEnableSendButton()
     },
+
+    async getParticipantListCity() {
+      const response = await this.getParicipantListCityAPI()
+      if (response) {
+        this.cityList = response
+      }
+    },
+
     async handleParticipantSearch() {
       this.isAbleToPushButton = false
       this.fairParticipantsTable.loading = true
@@ -710,6 +769,12 @@ export default {
     },
 
     async handleParticipantListExcelDownload() {
+      new Toast(
+        'İndirme işlemi hazırlanıyor...',
+        'info',
+        true,
+        'text-white align-items-center',
+      )
       this.isAbleToPushButton = false
       const response = await this.getParticipantListExcelAPI({
         fair: this.selectedFair,

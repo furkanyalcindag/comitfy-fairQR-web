@@ -10,6 +10,7 @@ export default class FairParticipantDTO {
     mobilePhone,
     email,
     companyName,
+    city,
   }) {
     return new FairParticipantDTO({
       uuid: uuid,
@@ -18,6 +19,7 @@ export default class FairParticipantDTO {
       mobilePhone: mobilePhone,
       email: email,
       companyName: companyName,
+      city: city,
     })
   }
 
@@ -29,6 +31,7 @@ export default class FairParticipantDTO {
       mobilePhone: this.mobilePhone,
       email: this.email,
       companyName: this.companyName,
+      city: this.city,
     }
   }
 
@@ -39,6 +42,7 @@ export default class FairParticipantDTO {
     mobilePhone = null,
     email = null,
     companyName = null,
+    city = null,
   }) {
     this.uuid = uuid
     this.firstName = firstName
@@ -46,5 +50,6 @@ export default class FairParticipantDTO {
     this.mobilePhone = mobilePhone
     this.email = email
     this.companyName = companyName
+    this.city = city
   }
 }
