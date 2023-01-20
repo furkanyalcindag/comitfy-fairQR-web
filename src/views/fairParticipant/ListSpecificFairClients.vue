@@ -719,6 +719,12 @@ export default {
       }
     },
     async getParticipantPDF({ participant }) {
+      new Toast(
+        'İndirme işlemi hazırlanıyor...',
+        'info',
+        true,
+        'text-white align-items-center',
+      )
       this.isAbleToPushButton = false
       const response = await this.getParticipantPDFAPI({
         participant: participant,
@@ -763,6 +769,12 @@ export default {
     },
 
     async handleParticipantListExcelDownload() {
+      new Toast(
+        'İndirme işlemi hazırlanıyor...',
+        'info',
+        true,
+        'text-white align-items-center',
+      )
       this.isAbleToPushButton = false
       const response = await this.getParticipantListExcelAPI({
         fair: this.selectedFair,
