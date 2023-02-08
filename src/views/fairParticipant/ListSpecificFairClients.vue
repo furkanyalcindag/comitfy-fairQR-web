@@ -259,19 +259,31 @@
             <CFormLabel for="add-fair-client-city"
               >Şehir<span class="text-danger">*</span></CFormLabel
             >
-            <CFormSelect
-              id="add-fair-client-city"
-              size="sm"
-              class="mb-3 p-2"
-              @change="addedItem.data.city = $event.target.value"
-              required
-              feedbackInvalid="Lütfen bir Şehir Seçiniz"
+            <v-select
+              id="edit-fair-client-city"
+              v-model="addedItem.data.city"
+              :options="cityList"
+              label="name"
+              :loading="!cityList"
             >
-              <option value="">--- Şehir Seçiniz ---</option>
-              <option v-for="city in cityList" :key="city.index" :value="city">
-                {{ city }}
-              </option>
-            </CFormSelect>
+              <template v-slot:no-options="{ search, searching }">
+                <template v-if="searching">
+                  Sonuç bulunamadı:
+                  <em>{{ search }}</em
+                  >.
+                </template>
+                <em v-else style="opacity: 0.5">Bir daha dene.</em>
+              </template>
+              <template #search="{ attributes, events }">
+                <input
+                  class="form-control vs__search"
+                  feedbackInvalid="Lütfen bir şehir adı giriniz"
+                  :required="!addedItem.data.city"
+                  v-bind="attributes"
+                  v-on="events"
+                />
+              </template>
+            </v-select>
           </CCol>
 
           <CModalFooter class="pe-0">
@@ -420,21 +432,31 @@
             <CFormLabel for="edit-fair-client-city"
               >Şehir<span class="text-danger">*</span></CFormLabel
             >
-            <CFormSelect
+            <v-select
               id="edit-fair-client-city"
-              size="sm"
-              class="mb-3 p-2"
-              @change="editedItem.data.city = $event.target.value"
-              required
-              feedbackInvalid="Lütfen bir Şehir Seçiniz"
+              v-model="editedItem.data.city"
+              :options="cityList"
+              label="name"
+              :loading="!cityList"
             >
-              <option :value="editedItem.data.city">
-                {{ editedItem.data.city }}
-              </option>
-              <option v-for="city in cityList" :key="city.index" :value="city">
-                {{ city }}
-              </option>
-            </CFormSelect>
+              <template v-slot:no-options="{ search, searching }">
+                <template v-if="searching">
+                  Sonuç bulunamadı:
+                  <em>{{ search }}</em
+                  >.
+                </template>
+                <em v-else style="opacity: 0.5">Bir daha dene.</em>
+              </template>
+              <template #search="{ attributes, events }">
+                <input
+                  class="form-control vs__search"
+                  feedbackInvalid="Lütfen bir şehir adı giriniz"
+                  :required="!editedItem.data.city"
+                  v-bind="attributes"
+                  v-on="events"
+                />
+              </template>
+            </v-select>
           </CCol>
 
           <CModalFooter class="pe-0">
