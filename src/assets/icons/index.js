@@ -28,6 +28,7 @@ import { cifUs, cifBr, cifIn, cifFr, cifEs, cifPl } from '@coreui/icons'
 import {
   cilArrowBottom,
   cilArrowRight,
+  cilPeople,
   cilArrowTop,
   cilSearch,
   cilHouse,
@@ -68,7 +69,6 @@ import {
   cilNotes,
   cilOptions,
   cilPencil,
-  cilPeople,
   cilPuzzle,
   cilSettings,
   cilShieldAlt,

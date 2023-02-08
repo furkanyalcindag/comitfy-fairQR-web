@@ -28,6 +28,13 @@ const routes = [
             props: true,
           },
           {
+            path: '/fair/visitor-list/:uuid',
+            name: 'FairVisitortList',
+            component: () =>
+              import('@/views/fairParticipant/FairVisitorsList.vue'),
+            props: true,
+          },
+          {
             path: '/fair/list',
             name: 'FairList',
             component: () => import('@/views/fair/ListFair.vue'),

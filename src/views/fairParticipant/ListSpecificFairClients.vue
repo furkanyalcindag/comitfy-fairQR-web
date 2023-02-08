@@ -261,7 +261,7 @@
             >
             <v-select
               id="edit-fair-client-city"
-              v-model="addedItem.data.city"
+              v-model="editedItem.data.city"
               :options="cityList"
               label="name"
               :loading="!cityList"
@@ -278,7 +278,7 @@
                 <input
                   class="form-control vs__search"
                   feedbackInvalid="Lütfen bir şehir adı giriniz"
-                  :required="!addedItem.data.city"
+                  :required="!editedItem.data.city"
                   v-bind="attributes"
                   v-on="events"
                 />

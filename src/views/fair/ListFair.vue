@@ -102,6 +102,9 @@
               <CIcon v-if="active" class="text-success" icon="cil-check-alt" />
               <CIcon v-else icon="cil-x" class="text-danger" />
             </template>
+            <template #header-operations="header">
+              <div class="text-center w-100">{{ header.text }}</div>
+            </template>
             <template #item-operations="item">
               <div>
                 <CButtonGroup role="group" size="sm">
@@ -148,6 +151,25 @@
                     "
                   >
                     <CIcon icon="cil-list" />
+                  </CButton>
+
+                  <CButton
+                    color="info"
+                    class="ms-2 text-white align-items-center"
+                    shape="rounded-pill"
+                    size="sm"
+                    v-c-tooltip="{
+                      content: 'Ziyaretçiler',
+                      placement: 'top',
+                    }"
+                    @click="
+                      $router.push({
+                        name: 'FairVisitortList',
+                        params: { uuid: item.uuid },
+                      })
+                    "
+                  >
+                    <CIcon icon="cil-people" />
                   </CButton>
                 </CButtonGroup>
               </div>

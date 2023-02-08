@@ -50,7 +50,7 @@ export default {
 
       var config = {
         method: 'post',
-        url: 'fair-participant/get-participants-by-fair/' + id ,
+        url: 'fair-participant/get-participants-by-fair/' + id,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -66,6 +66,37 @@ export default {
         })
       return response
     },
+
+    async getVisitorsBySearch(state, { searchText, pageOptions, id }) {
+      // CHECK IF USER LOGGED IN ALREADY
+
+      // ROLE CHECK IS NEEDED HERE DUE BY SECURITY -----------IMPORTANT
+      var axios = require('axios')
+      var data = FilterSearchDTO.createFromJson({
+        filters: [{ key: 'email', operation: ':', value: searchText }],
+        pageNumber: pageOptions.page - 1,
+        pageSize: pageOptions.rowsPerPage,
+      })
+
+      var config = {
+        method: 'post',
+        url: 'fair-participant/get-participateds-by-fair/' + id,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      }
+      const response = await axios(config)
+        .then(function (response) {
+          return response.data
+        })
+        .catch(function (error) {
+          console.log(error)
+          return null
+        })
+      return response
+    },
+
     async addParticipantToFair(state, { participant = null, fairUUID = null }) {
       // ROLE CHECK IS NEEDED HERE DUE BY SECURITY --------------IMPORTANT
       var axios = require('axios')
@@ -166,7 +197,7 @@ export default {
         method: 'get',
         // The uuid must be participant ------------IMPORTANT
         url: 'fair-participant/generate-ticket/' + participant.uuid,
-        headers: {'content-type': 'application/pdf'},
+        headers: { 'content-type': 'application/pdf' },
         responseType: 'arraybuffer',
       }
 
@@ -208,7 +239,7 @@ export default {
         })
       return response
     },
-    
+
     async getParticipantListCity(state) {
       // CHECK IF USER LOGGED IN ALREADY
 
@@ -231,7 +262,60 @@ export default {
         })
       return response
     },
+    async getVisitorsByFair(state, { page = {}, fairUUID = null }) {
+      // CHECK IF USER LOGGED IN ALREADY
 
+      // ROLE CHECK IS NEEDED HERE DUE BY SECURITY -----------IMPORTANT
+      var axios = require('axios')
+      let filterBy = page.filter ?? []
+      var data = JSON.stringify({
+        filters: filterBy,
+        pageNumber: page.page - 1,
+        pageSize: page.rowsPerPage,
+      })
+      var config = {
+        method: 'post',
+        url: 'fair-participant/get-participateds-by-fair/' + fairUUID,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      }
+      const response = await axios(config)
+        .then(function (response) {
+          return response.data
+        })
+        .catch(function (error) {
+          console.log(error)
+          return null
+        })
+      return response
+    },
+
+    async getVisitorsListExcel(state, { fair = null }) {
+      var axios = require('axios')
+      var config = {
+        method: 'post',
+        // The uuid must be participant ------------IMPORTANT
+        url:
+          '/fair-participant/generate-excel-participateds-by-fair/' + fair.uuid,
+        responseType: 'blob',
+      }
+
+      const response = await axios(config)
+        .then(function (response) {
+          store.dispatch('downloadExcel', {
+            data: response.data,
+            excelName: fair.name + '_ziyaretçi_listesi',
+          })
+          return true
+        })
+        .catch(function (error) {
+          console.log(error)
+          return false
+        })
+      return response
+    },
   },
   getters: {},
 }

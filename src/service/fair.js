@@ -152,6 +152,7 @@ export default {
         })
       return response
     },
+
     // eslint-disable-next-line no-unused-vars
     async getNewestActiveFair(state) {
       // CHECK IF USER LOGGED IN ALREADY
