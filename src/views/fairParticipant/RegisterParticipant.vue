@@ -96,7 +96,7 @@
                   </CInputGroupText>
 
                   <v-select
-                    class="flex-fill"
+                    class="flex-fill fix-vselect-look"
                     id="edit-fair-client-city"
                     v-model="addedItem.data.city"
                     :options="cityList"
@@ -244,3 +244,14 @@ export default {
   },
 }
 </script>
+
+<style lang="css" scoped>
+.fix-vselect-look :is(.vs__selected-options) {
+  flex-wrap: nowrap !important;
+}
+
+.fix-vselect-look :is(.vs__search) {
+  padding: 0px !important;
+  border: none !important;
+}
+</style>

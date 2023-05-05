@@ -265,6 +265,7 @@
               :options="cityList"
               label="name"
               :loading="!cityList"
+              class="fix-vselect-look"
             >
               <template v-slot:no-options="{ search, searching }">
                 <template v-if="searching">
@@ -438,6 +439,7 @@
               :options="cityList"
               label="name"
               :loading="!cityList"
+              class="fix-vselect-look"
             >
               <template v-slot:no-options="{ search, searching }">
                 <template v-if="searching">
@@ -849,5 +851,14 @@ export default {
     opacity: 1;
     max-width: full;
   }
+}
+
+.fix-vselect-look :is(.vs__selected-options) {
+  flex-wrap: nowrap !important;
+}
+
+.fix-vselect-look :is(.vs__search) {
+  padding: 0px !important;
+  border: none !important;
 }
 </style>
