@@ -180,12 +180,15 @@ export default {
   },
   watch: {
     'fairParticipantsTable.serverOptions'(newvalue) {
-      this.getFairParticipants({ pageOptions: newvalue, fairUUID: this.uuid })
+      this.getVisitors({ pageOptions: newvalue, fairUUID: this.uuid })
     },
   },
   created() {
     this.getFair({ uuid: this.uuid })
-    this.getVisitors()
+    this.getVisitors({
+      pageOptions: this.fairParticipantsTable.serverOptions,
+      fairUUID: this.uuid,
+    })
   },
   methods: {
     ...mapActions({
@@ -207,11 +210,11 @@ export default {
           : null
       }
     },
-    async getVisitors() {
+    async getVisitors({ pageOptions = null, fairUUID = null }) {
       this.fairParticipantsTable.loading = true
       const response = await this.getVisitorsAPI({
-        page: this.fairParticipantsTable.serverOptions,
-        fairUUID: this.uuid,
+        page: pageOptions,
+        fairUUID: fairUUID,
       })
       this.items = response ? response.data : []
       this.fairParticipantsTable.serverItemsLength = response.totalElements
